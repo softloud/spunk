@@ -105,6 +105,8 @@ spunk_dat %>%
   )
 ```
 
+# Exporting data
+
 These data are then exportable. For example, if we want to export a dataset to a .csv format so that it can be imported into different software platforms.
 
 ```{r eval=FALSE}

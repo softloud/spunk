@@ -2,11 +2,6 @@
 title: "Exploratory data analyses"
 description: |
   Summaries of interventions and classes.
-author:
-  - name: Nora Jones 
-    url: https://example.com/norajones
-    affiliation: Spacely Sprockets
-    affiliation_url: https://example.com/spacelysprokets
 date: "`r Sys.Date()`"
 output: 
   distill::distill_article:
