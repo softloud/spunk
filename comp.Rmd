@@ -1,0 +1,45 @@
+---
+title: "Comparisons between intervention estimates"
+description: |
+  Rank and estimated effect comparisons from network meta-analysis.
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(readr)
+
+```
+
+# Count
+
+```{r layout = "l-screen"}
+read_rds("img/count-matrix.rds")
+```
+
+# Volume
+
+
+```{r layout = "l-screen"}
+read_rds("img/volume-matrix.rds")
+```
+
+
+# Morphology
+
+
+```{r layout = "l-screen"}
+read_rds("img/morphology-matrix.rds")
+```
+
+
+# Motility
+
+
+```{r layout = "l-screen"}
+read_rds("img/motility-matrix.rds")
+```
+

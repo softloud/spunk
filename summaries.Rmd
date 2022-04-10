@@ -1,0 +1,89 @@
+---
+title: "Exploratory data analyses"
+description: |
+  Summaries of interventions and classes.
+author:
+  - name: Nora Jones 
+    url: https://example.com/norajones
+    affiliation: Spacely Sprockets
+    affiliation_url: https://example.com/spacelysprokets
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+# Summary of classes
+
+```{r echo=FALSE}
+
+# classes in dataset
+spunk_dat %>%
+  # count number of studies and total participants for each class
+  group_by(outcome, class) %>% 
+  summarise(studies = n_distinct(study),
+            participants = sum(intervention_n) + sum(control_n)) %>% 
+  ungroup() %>% 
+  arrange(outcome, class, desc(studies)) %>%
+  gt(
+    groupname_col = "outcome"
+  ) %>% 
+  opt_row_striping() %>% 
+  tab_header("Number of studies and participants for each class") %>% 
+  summary_rows(
+    groups = TRUE,
+    columns = c(studies, participants),
+    fns = list(
+      total = "sum",
+      maximum = "max"
+    ),
+    formatter = fmt_integer
+  )
+
+```
+
+
+# Summary of interventions 
+
+```{r echo=FALSE}
+library(gt) # for making nice html tables
+library(tidyverse)
+library(spunk)
+
+
+
+# interventions in dataset
+spunk_dat %>%
+  # count number of studies and total participants for each intervention
+  group_by(outcome, class, intervention) %>% 
+  summarise(studies = n_distinct(study),
+            participants = sum(intervention_n) + sum(control_n)) %>%
+  ungroup() %>% 
+  arrange(outcome, class, intervention, desc(studies)) %>%
+  # output as formatted table
+  gt(
+    groupname_col = "outcome",
+    rowname_col = "class"
+  ) %>% 
+  opt_row_striping() %>% 
+  tab_header("Number of studies and participants for each intervention") %>% 
+  summary_rows(
+    groups = TRUE,
+    columns = c(studies, participants),
+    fns = list(
+      total = "sum",
+      maximum = "max"
+    ),
+    formatter = fmt_integer
+  )
+
+
+```
+
+

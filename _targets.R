@@ -183,14 +183,14 @@ list(
 
     ) %>%
       nma(trt_effects = "random"),
-    pattern = map(smd_dat),
+    pattern = map(fit_dat),
     iteration = "list"
   ),
 
   # tar_target(
   #   fit_mod,
   #   set_agd_arm(
-  #     data = smd_dat,
+  #     data = fit_dat,
   #     y = mean,
   #     se = sd/sqrt(n),
   #     sample_size = n,
@@ -203,14 +203,14 @@ list(
   #     nma(trt_effects = "random",
   #         regression = ~.trt:moderator
   #     ),
-  #   pattern = map(smd_dat),
+  #   pattern = map(fit_dat),
   #   iteration = "list"
   # ),
 
   # tar_target(
   #   fit_nma,
   #   set_agd_contrast(
-  #     data = smd_dat,
+  #     data = fit_dat,
   #     y = smd,
   #     se = se_smd,
   #     sample_size = n,
@@ -223,7 +223,7 @@ list(
   #     nma(trt_effects = "random",
   #         regression = ~.trt:moderator
   #         ),
-  #   pattern = map(smd_dat)
+  #   pattern = map(fit_dat)
   # ),
 
 
@@ -423,6 +423,9 @@ list(
                sprintf("Writing table to:\n%s", gt_path) %>%
                  message()
 
+               write_rds(this_gt,
+                         sprintf("img/%s-matrix.rds", this_outcome)
+                         )
                gtsave(this_gt, gt_path)
 
              },
@@ -547,11 +550,11 @@ list(
   # get sample sizes
   tar_target(
     sof_n,
-    smd_dat %>%
+    fit_dat %>%
       select(study, intervention, class, n) %>%
       group_by(outcome, intervention, class) %>%
       summarise(n = sum(n)),
-    pattern = map(smd_dat),
+    pattern = map(fit_dat),
     iteration = "list"
   ),
 

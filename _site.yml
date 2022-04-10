@@ -1,4 +1,4 @@
-name: "spunk"
+name: "spunk::"
 title: "spunk::"
 description: |
   Reproducible packaged analysis
@@ -7,7 +7,17 @@ navbar:
   left:
     - text: "Machine readable data"
       href: dataset.html
-    - text: "Living analysis"
+    - text: "Living analyses"
+      menu:
+        - text: "Summary tables of interventions and classes"
+          href: summaries.html
+        - text: "Summary of Findings tables"
+          href: sof.html
+        - text: "Comparisons between interventions"
+          href: comp.html
+        - text: "Sensitivity"
+          href: sensitivity.html
+    - text: "Contributing"
       href: extending.html
   right:
     - text: "Within-analysis documentation"

@@ -58,71 +58,7 @@ The analyses provided in the associated Cochrane review are summaries and overvi
 
 Researchers may be interested in investigating one specific intervention from the various interventions in the dataset. Here we provide two tables with summary information about interventions in the first, and class in the second. 
 
-### Summary of interventions 
-
-```{r echo=FALSE}
-library(gt) # for making nice html tables
-library(tidyverse)
-
-
-
-# interventions in dataset
-spunk_dat %>%
-  # count number of studies and total participants for each intervention
-  group_by(outcome, class, intervention) %>% 
-  summarise(studies = n_distinct(study),
-            participants = sum(intervention_n) + sum(control_n)) %>%
-  ungroup() %>% 
-  arrange(outcome, class, intervention, desc(studies)) %>%
-  # output as formatted table
-  gt(
-    groupname_col = "outcome",
-    rowname_col = "class"
-  ) %>% 
-  opt_row_striping() %>% 
-  tab_header("Number of studies and participants for each intervention") %>% 
-  summary_rows(
-    groups = TRUE,
-    columns = c(studies, participants),
-    fns = list(
-      total = "sum",
-      maximum = "max"
-    ),
-    formatter = fmt_integer
-  )
-
-
-```
-
-### Summary of classes
-
-```{r echo=FALSE}
-
-# classes in dataset
-spunk_dat %>%
-  # count number of studies and total participants for each class
-  group_by(outcome, class) %>% 
-  summarise(studies = n_distinct(study),
-            participants = sum(intervention_n) + sum(control_n)) %>% 
-  ungroup() %>% 
-  arrange(outcome, class, desc(studies)) %>%
-  gt(
-    groupname_col = "outcome"
-  ) %>% 
-  opt_row_striping() %>% 
-  tab_header("Number of studies and participants for each class") %>% 
-  summary_rows(
-    groups = TRUE,
-    columns = c(studies, participants),
-    fns = list(
-      total = "sum",
-      maximum = "max"
-    ),
-    formatter = fmt_integer
-  )
-
-```
-
+See Summary tables in Living analyses for detailed information about the interventions and classes included in this analysis. 
 
 ## Analyse specific classes and interventions
 
@@ -130,6 +66,7 @@ spunk_dat %>%
 These data can be readily accessed by filtering by intervention using `tidyverse::`.
 
 ```{r}
+library(tidyverse)
 conflicted::conflict_prefer("filter", "dplyr")
 
 spunk_dat %>% 
@@ -172,13 +109,11 @@ These data are then exportable. For example, if we want to export a dataset to a
 
 ```{r eval=FALSE}
 # create a dataset object to write
-coenzyme_dat <- 
-spunk_dat %>% 
-  filter(
-    class == "coenzymes"
-  )
+coenzyme_dat <-
+  spunk_dat %>%
+  filter(class == "coenzymes")
 
-# write data to .csv file  
+# write data to .csv file
 write_csv(coenzyme_dat, "coenzyme_dat.csv")
 
 ```
