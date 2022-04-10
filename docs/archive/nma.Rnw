@@ -1,0 +1,226 @@
+\documentclass{article}
+
+\usepackage{authblk}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+colorlinks = TRUE,
+linkcolor = gray,
+urlcolor = gray,
+filecolor = gray,
+citecolor = gray
+}
+
+\title{Infertility network meta-analysis}
+\author[1]{Charles T. Gray's analysis for Kerry Mills' project}
+\affil[1]{Evidence synthesis lab, Newcastle University, UK}
+
+\begin{document}
+
+\maketitle
+
+% \tableofcontents
+
+\listoffigures
+
+<<knitr opts, echo=FALSE>>=
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+
+@
+
+
+<<pkgs, message = FALSE>>=
+# packages
+library(tidyverse)
+library(xtable)
+library(readxl)
+library(janitor)
+library(skimr)
+library(multinma)
+library(targets)
+library(patchwork)
+library(dontpanic)
+library(ggthemes)
+
+@
+
+<<load networks>>=
+nma_mods <- tar_read(nmas)
+outcome_labels <- tar_read(outcomes)
+
+@
+
+% \section{Count network meta-analysis}
+
+<<>>=
+count_nma <- 
+  nma_mods %>% 
+  pluck(which(outcome_labels == "count"))
+
+
+@
+
+\begin{figure}
+
+<<>>=
+plot(count_nma$network)
+@
+
+
+\caption[Count network]{The network plot describes the direct evidence in the review of counts. If a line connects two nodes in the network, then there is at least one study in the review that compares these two interventions. The missing comparisons are estimated in network meta-analysis.}
+\end{figure}
+
+\begin{figure}
+
+<<>>=
+plot(relative_effects(count_nma))
+@
+
+
+\caption[Count effects]{Network meta-analysis of counts estimates of the interventions' standardised mean difference from placebo.}
+\end{figure}
+
+\begin{figure}
+
+<<>>=
+tau(count_nma) +
+  theme_tufte(base_size = 20)
+@
+
+
+\caption[Count heterogeneity]{Network meta-analysis of counts estimate of the variation between studies.}
+\end{figure}
+
+
+% \section{Volume network meta-analysis}
+
+
+<<>>=
+volume_nma <- 
+  nma_mods %>% 
+  pluck(which(outcome_labels == "volume"))
+
+
+@
+
+\begin{figure}
+
+<<>>=
+plot(volume_nma$network)
+@
+
+
+\caption[Volume network]{The network plot describes the direct evidence in the review of volumes. If a line connects two nodes in the network, then there is at least one study in the review that compares these two interventions. The missing comparisons are estimated in network meta-analysis.}
+\end{figure}
+
+\begin{figure}
+
+<<>>=
+plot(relative_effects(volume_nma))
+@
+
+
+\caption[Volume effects]{Network meta-analysis of volumes estimates of the interventions' standardised mean difference from placebo.}
+\end{figure}
+
+\begin{figure}
+
+<<>>=
+tau(volume_nma) +
+  theme_tufte(base_size = 20)
+@
+
+
+\caption[Volume heterogeneity]{Network meta-analysis of volumes estimate of the variation between studies.}
+\end{figure}
+
+
+
+% \section{Morphology network meta-analysis}
+
+
+<<>>=
+morphology_nma <- 
+  nma_mods %>% 
+  pluck(which(outcome_labels == "morphology"))
+
+
+@
+
+\begin{figure}
+
+<<>>=
+plot(morphology_nma$network)
+@
+
+
+\caption[Morphology network]{The network plot describes the direct evidence in the review of morphologys. If a line connects two nodes in the network, then there is at least one study in the review that compares these two interventions. The missing comparisons are estimated in network meta-analysis.}
+\end{figure}
+
+\begin{figure}
+
+<<>>=
+plot(relative_effects(morphology_nma))
+@
+
+
+\caption[Morphology effects]{Network meta-analysis of morphologys estimates of the interventions' standardised mean difference from placebo.}
+\end{figure}
+
+\begin{figure}
+
+<<>>=
+tau(morphology_nma) +
+  theme_tufte(base_size = 20)
+@
+
+
+\caption[Morphology heterogeneity]{Network meta-analysis of morphologys estimate of the variation between studies.}
+\end{figure}
+
+
+
+% \section{Vitality network meta-analysis}
+
+
+<<>>=
+vitality_nma <- 
+  nma_mods %>% 
+  pluck(which(outcome_labels == "vitality"))
+
+
+@
+
+\begin{figure}
+
+<<>>=
+plot(vitality_nma$network)
+@
+
+
+\caption[Vitality network]{The network plot describes the direct evidence in the review of vitalitys. If a line connects two nodes in the network, then there is at least one study in the review that compares these two interventions. The missing comparisons are estimated in network meta-analysis.}
+\end{figure}
+
+\begin{figure}
+
+<<>>=
+plot(relative_effects(vitality_nma))
+@
+
+
+\caption[Vitality effects]{Network meta-analysis of vitalitys estimates of the interventions' standardised mean difference from placebo.}
+\end{figure}
+
+\begin{figure}
+
+<<>>=
+tau(vitality_nma) +
+  theme_tufte(base_size = 20)
+@
+
+
+\caption[Vitality heterogeneity]{Network meta-analysis of vitalitys estimate of the variation between studies.}
+\end{figure}
+
+
+\end{document}

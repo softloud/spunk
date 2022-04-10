@@ -1,0 +1,62 @@
+---
+title: "Living analsysis"
+description: |
+  Computationally extending the analysis. 
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+# Code reviewers
+
+Thank you x and x for offering to help out with this project. Where Charles needs the most help is in checking the code does what she says that it does. 
+
+Checking each target in the [`_targets`](https://books.ropensci.org/targets/) file filters to things expected and so forth. 
+
+In this process, adding comments to the code of what your understanding of what it does is very useful. Another thing to consider is renaming the targets so that the pipeline conveys the analysis steps clearer. 
+
+Do the visualisation answer the questions they are meant to answer? 
+
+# Living data analysis 
+
+Code reviewers and other researchers may also wish to extend, that is, patch the script of this analysis. The rest of this document provides guidance on how to do that. A working version of R, and a willingess to learn a small set of functions, is all one needs to have in order to contribute to this analysis.  
+
+Ideally future studies are appended to the dataset so that it remains an up to date repository of all studies examining interventions for male infertility. A good example of a large-scale living analysis is Cochrane's [COVID-NMA](https://covid-nma.com/), applying evidence synthesis to all COVID research as it comes out.
+
+There may be a particular relevant skillset one has developed that would be a small effort but improve the analysis immensely. 
+
+# GitHub
+
+The [`usethis::pr_`](https://usethis.r-lib.org/articles/pr-functions.html) functions are a blessing for this kind of thing. For getting your computer to talk to git, an invaluable resource (every time; every new computer) is [Happy Git with R](https://happygitwithr.com/resources.html).  Just a few functions to smooth the process of forking and contributing to a package. It does require an investment in reading the documentation for those few functions.
+
+# Targets and `tidyverse::`
+
+This analysis is implemented in [`tidverse::`](https://r4ds.had.co.nz/) script, and the analysis is structured as both a package and as a make-like pipeline. 
+
+```{r}
+library(targets) # for pipeline
+library(tidyverse) # data science functions
+
+```
+
+```{r message=FALSE}
+tar_visnetwork(targets_only = TRUE)
+```
+
+Subsections of the pipeline can be viewed by name or by `tidyverse::` selection tools. For example, the pipeline of head to head comparisons can be viewed thus.
+
+```{r message=FALSE}
+tar_visnetwork(allow = starts_with("hth"))
+```
+
+# Implementing other models
+
+# Correcting mistakes, improving methods
+
+# 
+
+# Move this? - quality assurance
+
+```{r eval=FALSE}
+tar_read(qa_class)
+```
+

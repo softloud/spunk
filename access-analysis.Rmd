@@ -1,0 +1,73 @@
+---
+title: "Access sperm:: analysis"
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r}
+library(targets)
+library(tidyverse)
+library(sperm)
+
+```
+
+
+## Installation
+
+The `sperm::` analysis is available at [GitHub](https://github.com/softloud/sperm) with:
+
+
+Either download the codebase (green `Code` button) as a .zip file or use GitHub command-line interface (`gh cli`)
+
+``` bash
+gh repo clone softloud/sperm
+```
+
+The raw data are preloaded in the packaged analysis which can be accessed by installing the `sperm::` package:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("softloud/sperm")
+```
+
+`sperm::` is created using `targets::` so that each step in the analysis can be accessed.
+
+```r
+install.packages("targets")
+```
+
+`sperm::`'s analysis pipeline can be viewed:
+
+```{r message=FALSE}
+tar_glimpse()
+```
+
+`sperm::` uses the `renv::` package to snapshot the versions of packages used to ensure reproducibility, run this command to load the required packages after opening the R project.
+
+```r
+renv::restore()
+```
+
+
+
+# Raw data
+
+The raw data was last downloaded: 
+
+```{r}
+here::here("data", "count_obs.rda") %>%
+  file.info() %>%
+  pull(ctime)
+
+```
+
+There are four raw datasets preloaded in `sperm::` package: `count_obs`, `morphology_obs`, `motility_obs`, and `volumne_obs` scraped from the googlesheet. 
+
+```{r}
+count_obs
+```
+
+
+
+
+

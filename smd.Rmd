@@ -1,0 +1,21 @@
+---
+title: "Outcome calculations"
+description: |
+  Trials and tribulations of standardised mean difference.
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+This is a bit tricky. We have some studies with more than one control. 
+
+To use the `multinma::` package to initialise the networks, 
+
+
+## current calculation
+
+## failed calculations
+

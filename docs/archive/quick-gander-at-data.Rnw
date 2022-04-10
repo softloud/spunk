@@ -1,0 +1,184 @@
+\documentclass{article}
+
+\usepackage{authblk}
+
+\title{Assessing readiness of infertility data for network meta-analysis and network meta-regression}
+\author[1]{Charles T. Gray}
+\affil[1]{Evidence synthesis lab, Newcastle University, UK}
+
+\begin{document}
+
+\maketitle
+
+<<pkgs>>=
+# packages
+library(tidyverse)
+library(xtable)
+library(readxl)
+library(janitor)
+library(skimr)
+library(multinma)
+
+@
+
+\section{Take a gander at the data}
+
+There are four outcomes of interest. Let's see what we can see from the data provided. There are also some wonky data, some of which are medians, which can be converted using methods I explored in my doctorate :) 
+
+<<get data>>=
+count_dat <- read_xlsx(
+  "DietInfertility Data.xlsx",
+  sheet = "Sperm count"
+) %>% clean_names() %>% 
+  # will deal with wonky data later
+  select(1:12)
+
+volumne_dat <- read_xlsx(
+  "DietInfertility Data.xlsx",
+  sheet = "Semen volume"
+) %>% clean_names() %>% 
+  # will deal with wonky data later
+  select(1:12) 
+
+morphology_dat <- read_xlsx(
+  "DietInfertility Data.xlsx",
+  sheet = "Sperm morphology"
+) %>% clean_names() %>% 
+  # will deal with wonky data later
+  select(1:12)
+
+vitality_dat <- read_xlsx(
+  "DietInfertility Data.xlsx",
+  sheet = "Sperm vitality"
+) %>% clean_names() %>% 
+  # will deal with wonky data later
+  select(1:12)
+
+@
+
+So, it looks like we have four outcomes of interest:
+
+\begin{itemize}
+\item Sperm count
+\item Sperm volume
+\item Sperm morphology
+\item Sperm vitality
+\end{itemize}
+
+In order to perform network meta-analysis on these datasets, we need the following columns: 
+
+\begin{itemize}
+\item Unique study identifier
+\item Mean, standard deviation (or error), and sample size, if we wish to calculate standardised mean difference, or rate and sample size for a log-odds ratio.
+\item These statistics for the control and intervention groups.
+\item Intervention.
+\item Moderator columns for meta-regression.
+\end{itemize}
+
+<<colnmas>>=
+count_dat %>% str()
+morphology_dat %>% str()
+vitality_dat %>% str()
+volumne_dat %>% str()
+
+@
+
+Happily, we have the same column names for the four outcomes. 
+
+Let's see if I can identify the model structure here. 
+
+We have a study identifier, \verb|study_id|.
+
+<<>>=
+count_dat %>% pull(study_id) %>% head()
+
+# check the study identifier is unique
+count_dat %>% pull(study_id) %>% unique() %>% length() == nrow(count_dat)
+
+# yay
+@
+
+There are three different types of intervention identifers. Let's see how many levels they have.
+
+<<intervention levels, results='asis'>>=
+count_dat %>% 
+  summarise(
+    detailed = n_distinct(intervention_detailed),
+    grouped = n_distinct(grouped_intervention),
+    major = n_distinct(major_intervention_grouping)
+  ) %>% 
+  xtable()
+
+
+@
+
+
+These are the size of the potential networks we could build. The more nodes in our network, the more underlying variables we build into the meta-analysis. In general, it's best to go with fewer variables to avoid statistical issues such as overfitting. 
+
+As far as moderators go, I see a Type of Infertility variable. Let's see how many levels this has.
+
+<<moderator>>=
+count_dat %>% 
+  pull(type_of_infertility) %>% 
+  unique() %>% length()
+@
+
+Doesn't seem too large, so could potentially be used as a moderator. 
+
+\section{Network meta-analysis on count data}
+
+For a first run, let's see how we go building a network meta-analysis on  major intervention, without worrying about moderators for meta-regression yet. 
+
+<<>>=
+count_net <- 
+  count_dat %>% 
+  pivot_longer(
+    cols = c(contains("_mean"), contains("_sd"), contains("_n")),
+    names_to = c("arm", ".value"),
+    names_sep = "_"
+  ) %>% 
+  mutate(
+    arm = if_else(
+      arm == "control",
+      control,
+      major_intervention_grouping
+    )
+  ) %>% 
+  set_agd_arm(
+    data = .,
+    study = study_id,
+    trt = arm,
+    y = mean,
+    se = sd / sqrt(n),
+    sample_size = n,
+    trt_ref = "Placebo"
+  )   
+@
+
+
+<<>>=
+count_nma <-  
+  nma(
+    count_net,
+    trt_effects = "random"
+  )
+
+
+@
+
+
+Let's take a look at the results.
+
+<<>>=
+# the network
+plot(count_nma$network)
+
+# relative effects
+relative_effects(count_nma) %>% plot()
+
+
+@
+
+
+
+\end{document}

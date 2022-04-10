@@ -1,0 +1,146 @@
+---
+title: "spunk::"
+description: |
+  Reproducible packaged analysis
+site: 
+  distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating websites with Distill at:
+# https://rstudio.github.io/distill/website.html
+
+# Learn more about publishing to GitHub Pages at:
+# https://rstudio.github.io/distill/publish_website.html#github-pages
+
+library(tidyverse)
+library(sperm)
+library(targets)
+library(gt)
+
+
+```
+
+
+
+```{r pkg, message=FALSE}
+# packages used in this readme
+library(tidyverse)
+library(sperm)
+library(targets)
+library(gt)
+
+```
+
+## Installation
+
+The `spunk::` analysis is available at [GitHub](https://github.com/softloud/sperm) with:
+
+
+Either download the codebase (green `Code` button) as a .zip file or use GitHub command-line interface (`gh cli`)
+
+``` bash
+gh repo clone softloud/sperm
+```
+
+The raw data are preloaded in the packaged analysis which can be accessed by installing the `sperm::` package:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("softloud/sperm")
+```
+
+`sperm::` is created using `targets::` so that each step in the analysis can be accessed.
+
+```r
+install.packages("targets")
+```
+
+`sperm::`'s analysis pipeline can be viewed:
+
+```{r message=FALSE}
+tar_glimpse()
+```
+
+`sperm::` uses the `renv::` package to snapshot the versions of packages used to ensure reproducibility, run this command to load the required packages after opening the R project.
+
+```r
+renv::restore()
+```
+
+
+
+# Raw data
+
+The raw data was last downloaded: 
+
+```{r}
+file.info("data/count_obs.rda") %>% pull(ctime)
+```
+
+There are four raw datasets preloaded in `sperm::` package: `count_obs`, `morphology_obs`, `motility_obs`, and `volumne_obs` scraped from the googlesheet. 
+
+```{r}
+count_obs
+```
+
+# Cleaned data
+
+The cleaned data can be accessed using targets:
+
+```{r}
+tar_read(model_dat)
+```
+
+## Modelling variables
+
+We're interested in assessing 
+
+> `outcome = intervention_class + type of infertility`
+
+Currently `class` is set to `major_intervention_grouping` and `intervention` is set to `grouped_intervention`. The `moderator` is `type_of_infertility`.
+
+> Kerry, is this correct? Very easy to update if not :) 
+
+
+## Cleaning class labels
+
+There are 10 interventions with more than one class label. 
+
+```{r}
+tar_read(qa_class) %>% 
+  gt()
+```
+
+There needs to be at most one class label per intervention or the model will complain. Charles has set the class to be the most-used class label for each intervention.
+
+> Kerry please check you're happy with the class labels :)
+
+```{r}
+tar_read(model_dat) %>% 
+  count(intervention, class) %>% 
+  select(-n) %>% 
+  gt() 
+
+```
+
+
+## Modelling input
+
+Here's a random sample of ten observations:
+
+```{r, layout="l-page"}
+tar_read(wide_obs) %>% 
+  sample_n(10) %>% 
+  gt() %>% 
+  tab_header("Modelling data",
+             subtitle = "10 randomly-selected observations") %>% 
+  tab_options(
+  )
+
+```
+
+
+

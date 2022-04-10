@@ -1,0 +1,73 @@
+---
+title: "Data integrity and quality assurance"
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r}
+library(tidyverse)
+library(sperm)
+library(targets)
+library(gt)
+
+```
+
+
+# Cleaned data
+
+The cleaned data can be accessed using targets:
+
+```{r}
+tar_read(model_dat)
+```
+
+## Modelling variables
+
+We're interested in assessing 
+
+> `outcome = intervention_class + type of infertility`
+
+Currently `class` is set to `major_intervention_grouping` and `intervention` is set to `grouped_intervention`. The `moderator` is `type_of_infertility`.
+
+> Kerry, is this correct? Very easy to update if not :) 
+
+
+## Cleaning class labels
+
+There are 10 interventions with more than one class label. 
+
+```{r}
+tar_read(qa_class) %>% 
+  gt()
+```
+
+There needs to be at most one class label per intervention or the model will complain. Charles has set the class to be the most-used class label for each intervention.
+
+> Kerry please check you're happy with the class labels :)
+
+```{r}
+tar_read(model_dat) %>% 
+  count(intervention, class) %>% 
+  select(-n) %>% 
+  gt() 
+
+```
+
+
+## Modelling input
+
+Here's a random sample of ten observations:
+
+```{r, layout="l-page"}
+tar_read(wide_obs) %>% 
+  sample_n(10) %>% 
+  gt() %>% 
+  tab_header("Modelling data",
+             subtitle = "10 randomly-selected observations") %>% 
+  tab_options(
+  )
+
+```
+
+
+
