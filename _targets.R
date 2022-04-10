@@ -10,12 +10,11 @@ suppressMessages({
   conflicted::conflict_prefer("filter", "dplyr")
   options(mc.cores = parallel::detectCores())
 
-
   })
 
 
 
-list.files("R", full.names = TRUE) %>% map(source)
+# list.files("R", full.names = TRUE) %>% map(source)
 
 
 list(
