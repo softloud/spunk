@@ -1,5 +1,5 @@
 ---
-title: "Living analsysis"
+title: "Living analysis"
 description: |
   Computationally extending the analysis. 
 date: "`r Sys.Date()`"
@@ -11,9 +11,9 @@ output:
 
 # Code reviewers
 
-Thank you x and x for considering helping out with this project. The most important thing to check is that the code does what the manuscript says it does. 
+Thank you for considering helping out with this project. The most important thing to check is that the code does what the manuscript says it does. 
 
-Checking each target in the [`_targets`](https://books.ropensci.org/targets/) file filters to things expected and so forth. 
+Checking each target in the [`_targets.R`](https://github.com/softloud/spunk/blob/main/_targets.R) file filters to things expected and so forth. 
 
 In this process, adding comments to the code of what your understanding of what it does is very useful. Adding to the documentation of the functions would also be very helpful. Another thing to consider is renaming the targets so that the pipeline conveys the analysis steps clearer. 
 
@@ -31,7 +31,7 @@ There may be a particular relevant skillset one has developed that would be a sm
 
 The [`usethis::pr_`](https://usethis.r-lib.org/articles/pr-functions.html) functions are a blessing for this kind of thing. For getting your computer to talk to git, an invaluable resource (every time; every new computer) is [Happy Git with R](https://happygitwithr.com/resources.html).  Just a few functions to smooth the process of forking and contributing to a package. It does require an investment in reading the documentation for those few functions.
 
-Issues are a great way of pooling knowledge. One person might have an idea for an extension, and another may know how to implement it quickly. 
+[Issues](https://github.com/softloud/spunk/issues) are a great way of pooling knowledge. One person might have an idea for an extension, and another may know how to implement it quickly. 
 
 # Reproducible environment with `renv::`
 
