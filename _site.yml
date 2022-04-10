@@ -5,12 +5,13 @@ description: |
 output_dir: "docs"
 navbar:
   left:
-    - text: "Living analysis"
-      href: extending.html
     - text: "Machine readable data"
       href: dataset.html
+    - text: "Living analysis"
+      href: extending.html
   right:
     - text: "Within-analysis documentation"
+      href: archived.html
       menu:
         - text: "Access analysis"
           href: access-analysis.html

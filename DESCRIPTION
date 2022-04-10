@@ -1,10 +1,10 @@
 Package: spunk
-Title: Analysis
+Title: Nutritional interventions for male infertility: a systematic review and meta-analysis
 Version: 0.0.0.9000
 Authors@R: 
     person("Charles", "Gray", , "drcharlestgray@gmail.com", 
     role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "0000-0002-9978-011X"))
 Description: Packaged analysis for review.
 License: MIT + file LICENSE
 Encoding: UTF-8

@@ -157,7 +157,7 @@ list(
   ),
 
   tar_target(
-    smd_dat,
+    fit_dat,
     outcome_groups %>%
       smd_calc(),
     pattern = map(outcome_groups),
@@ -172,7 +172,7 @@ list(
   tar_target(
     fit_arms,
     set_agd_arm(
-      data = smd_dat,
+      data = fit_dat,
       y = mean,
       se = sd / sqrt(n),
       sample_size = n,

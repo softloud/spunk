@@ -87,29 +87,29 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>sperm::: Access sperm:: analysis</title>
+  <title>spunk::: Access sperm:: analysis</title>
 
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2022-02-28"/>
-  <meta property="article:created" itemprop="dateCreated" content="2022-02-28"/>
+  <meta property="article:published" itemprop="datePublished" content="2022-04-10"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-04-10"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="sperm::: Access sperm:: analysis"/>
+  <meta property="og:title" content="spunk::: Access sperm:: analysis"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:site_name" content="sperm::"/>
+  <meta property="og:site_name" content="spunk::"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="sperm::: Access sperm:: analysis"/>
+  <meta property="twitter:title" content="spunk::: Access sperm:: analysis"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Access sperm:: analysis"]},{"type":"character","attributes":{},"value":["2022-02-28"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Access sperm:: analysis"]},{"type":"character","attributes":{},"value":["2022-04-10"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2061,7 +2061,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Access sperm:: analysis","authors":[],"publishedDate":"2022-02-28T00:00:00.000+00:00"}
+{"title":"Access sperm:: analysis","authors":[],"publishedDate":"2022-04-10T00:00:00.000+02:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2069,11 +2069,22 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <header class="header header--fixed" role="banner">
 <nav class="distill-site-nav distill-site-header">
 <div class="nav-left">
-<a href="index.html" class="title">sperm::</a>
+<a href="index.html" class="title">spunk::</a>
+<a href="dataset.html">Machine readable data</a>
+<a href="extending.html">Living analysis</a>
 </div>
 <div class="nav-right">
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+Within-analysis documentation
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
 <a href="access-analysis.html">Access analysis</a>
 <a href="integrity.html">Data integrity</a>
+</div>
+</div>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2111,46 +2122,24 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p><code>sperm::</code>’s analysis pipeline can be viewed:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/targets/man/tar_glimpse.html'>tar_glimpse</a></span><span class='op'>(</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_glimpse.html'>tar_glimpse</a></span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code>
--
-
-\
-
-|
-
-/
-
--
-
-\
-
-|
-
-/
-
--
-
-\
-
- </code></pre>
-<div id="htmlwidget-8b1721cd81e263e5d93a" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8b1721cd81e263e5d93a">{"x":{"nodes":{"name":["wide_obs","tidy_dat","model_dat","qa_class","int_class","obs_class_fix"],"type":["stem","stem","stem","stem","stem","stem"],"status":["none","none","none","none","none","none"],"seconds":[null,null,null,null,null,null],"bytes":[null,null,null,null,null,null],"branches":[null,null,null,null,null,null],"id":["wide_obs","tidy_dat","model_dat","qa_class","int_class","obs_class_fix"],"label":["wide_obs","tidy_dat","model_dat","qa_class","int_class","obs_class_fix"],"level":[2,1,5,3,3,4],"color":["#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac"],"shape":["dot","dot","dot","dot","dot","dot"]},"edges":{"from":["tidy_dat","obs_class_fix","wide_obs","wide_obs","int_class","wide_obs"],"to":["wide_obs","model_dat","qa_class","int_class","obs_class_fix","obs_class_fix"],"arrows":["to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Stem"],"shape":["dot"],"color":["#899DA4"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-13be386201a9fc4a5cf5" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-13be386201a9fc4a5cf5">{"x":{"nodes":{"name":["sof_dat","outcome_groups","obs_control","wide_obs","ma_plot","nma_rel","qa_class","rank_rel_dat","sof_rel","hth_extract_less","model_dat","rank_diff","nma_rank","rank_rel_gt","pico_dat","pico_gt","check_classes","plot_network","sof_gt","rel_diff","sof_rank","hth_comp","fit_arms","int_class","ma_nma","fit_dat","tidy_dat","hth_less","ma_results_comp","hth_extract_ma","diff_calc","obs_long","write_model","sof_n","ma_dat","hth_less_ma","obs_int","ma_results_less","obs_class_fix","hth_ma","hth_dat"],"type":["pattern","stem","stem","stem","stem","pattern","stem","pattern","pattern","pattern","stem","pattern","pattern","pattern","pattern","pattern","stem","pattern","pattern","pattern","pattern","stem","pattern","stem","pattern","pattern","stem","pattern","stem","pattern","stem","stem","stem","pattern","stem","pattern","stem","stem","stem","pattern","pattern"],"status":["none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none"],"seconds":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"bytes":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"branches":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"id":["sof_dat","outcome_groups","obs_control","wide_obs","ma_plot","nma_rel","qa_class","rank_rel_dat","sof_rel","hth_extract_less","model_dat","rank_diff","nma_rank","rank_rel_gt","pico_dat","pico_gt","check_classes","plot_network","sof_gt","rel_diff","sof_rank","hth_comp","fit_arms","int_class","ma_nma","fit_dat","tidy_dat","hth_less","ma_results_comp","hth_extract_ma","diff_calc","obs_long","write_model","sof_n","ma_dat","hth_less_ma","obs_int","ma_results_less","obs_class_fix","hth_ma","hth_dat"],"label":["sof_dat","outcome_groups","obs_control","wide_obs","ma_plot","nma_rel","qa_class","rank_rel_dat","sof_rel","hth_extract_less","model_dat","rank_diff","nma_rank","rank_rel_gt","pico_dat","pico_gt","check_classes","plot_network","sof_gt","rel_diff","sof_rank","hth_comp","fit_arms","int_class","ma_nma","fit_dat","tidy_dat","hth_less","ma_results_comp","hth_extract_ma","diff_calc","obs_long","write_model","sof_n","ma_dat","hth_less_ma","obs_int","ma_results_less","obs_class_fix","hth_ma","hth_dat"],"level":[13,8,6,2,14,11,3,13,12,10,5,12,11,14,11,12,8,11,14,12,12,6,10,3,12,9,1,8,10,9,1,7,6,1,13,9,6,11,4,8,7],"color":["#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac"],"shape":["square","dot","dot","dot","dot","square","dot","square","square","square","dot","square","square","square","square","square","dot","square","square","square","square","dot","square","dot","square","square","dot","square","dot","square","dot","dot","dot","square","dot","square","dot","dot","dot","square","square"]},"edges":{"from":["sof_n","sof_rank","sof_rel","obs_long","model_dat","tidy_dat","ma_dat","fit_arms","wide_obs","rank_diff","rel_diff","nma_rel","hth_less_ma","obs_class_fix","diff_calc","nma_rank","fit_arms","rank_rel_dat","fit_arms","pico_dat","obs_long","fit_arms","sof_dat","diff_calc","nma_rel","nma_rank","model_dat","fit_dat","wide_obs","hth_comp","nma_rel","outcome_groups","hth_dat","hth_comp","hth_extract_ma","hth_ma","obs_control","obs_int","model_dat","ma_nma","ma_results_comp","ma_results_less","hth_less","model_dat","hth_comp","hth_extract_less","int_class","wide_obs","hth_dat","hth_comp","model_dat"],"to":["sof_dat","sof_dat","sof_dat","outcome_groups","obs_control","wide_obs","ma_plot","nma_rel","qa_class","rank_rel_dat","rank_rel_dat","sof_rel","hth_extract_less","model_dat","rank_diff","rank_diff","nma_rank","rank_rel_gt","pico_dat","pico_gt","check_classes","plot_network","sof_gt","rel_diff","rel_diff","sof_rank","hth_comp","fit_arms","int_class","ma_nma","ma_nma","fit_dat","hth_less","ma_results_comp","ma_results_comp","hth_extract_ma","obs_long","obs_long","write_model","ma_dat","ma_dat","ma_dat","hth_less_ma","obs_int","ma_results_less","ma_results_less","obs_class_fix","obs_class_fix","hth_ma","hth_dat","hth_dat"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Pattern","Stem"],"shape":["square","dot"],"color":["#899DA4","#899DA4"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p><code>sperm::</code> uses the <code>renv::</code> package to snapshot the versions of packages used to ensure reproducibility, run this command to load the required packages after opening the R project.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">restore</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">restore</span>()</span></code></pre></div>
 <h1 id="raw-data">Raw data</h1>
 <p>The raw data was last downloaded:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>here</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/here/man/here.html'>here</a></span><span class='op'>(</span><span class='st'>"data"</span>, <span class='st'>"count_obs.rda"</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/r/base/file.info.html'>file.info</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/pull.html'>pull</a></span><span class='op'>(</span><span class='va'>ctime</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>here</span><span class='fu'>::</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"data"</span>, <span class='st'>"count_obs.rda"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/r/base/file.info.html'>file.info</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span><span class='op'>(</span><span class='va'>ctime</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code>[1] &quot;2022-02-26 01:39:18 GMT&quot;</code></pre>
+<pre><code>[1] &quot;2022-04-09 17:11:34 CEST&quot;</code></pre>
 </div>
 <p>There are four raw datasets preloaded in <code>sperm::</code> package: <code>count_obs</code>, <code>morphology_obs</code>, <code>motility_obs</code>, and <code>volumne_obs</code> scraped from the googlesheet.</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2179,7 +2168,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 #   ...16 &lt;chr&gt;, ...17 &lt;chr&gt;, ...18 &lt;chr&gt;, ...19 &lt;chr&gt;, ...20 &lt;list&gt;,
 #   ...21 &lt;list&gt;, ...22 &lt;list&gt;, ...23 &lt;list&gt;, ...24 &lt;list&gt;, …</code></pre>
 </div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

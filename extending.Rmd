@@ -11,13 +11,13 @@ output:
 
 # Code reviewers
 
-Thank you x and x for offering to help out with this project. Where Charles needs the most help is in checking the code does what she says that it does. 
+Thank you x and x for considering helping out with this project. The most important thing to check is that the code does what the manuscript says it does. 
 
 Checking each target in the [`_targets`](https://books.ropensci.org/targets/) file filters to things expected and so forth. 
 
-In this process, adding comments to the code of what your understanding of what it does is very useful. Another thing to consider is renaming the targets so that the pipeline conveys the analysis steps clearer. 
+In this process, adding comments to the code of what your understanding of what it does is very useful. Adding to the documentation of the functions would also be very helpful. Another thing to consider is renaming the targets so that the pipeline conveys the analysis steps clearer. 
 
-Do the visualisation answer the questions they are meant to answer? 
+Do the visualisations answer the questions they are meant to answer? And, are the other analyses that need to be included?
 
 # Living data analysis 
 
@@ -69,14 +69,9 @@ tar_visnetwork(allow = starts_with("hth"))
 Here is the pipeline for fitting the network meta-analysis models. Functions are documented using `roxygen::2` and can be searched using R, for example `?smd_calc`.
 
 ```{r}
-tar_visnetwork(names = c("smd_dat", "fit_arms"))
+# fit dat and fit arms are the most relevant targets for the model implementation
+tar_visnetwork(names = c("fit_dat", "fit_arms"))
 
 ```
 
-
-# Move this to paper - quality assurance
-
-```{r eval=FALSE}
-tar_read(qa_class)
-```
-
+New targets can be appended to the pipeline that calculate the data to be fitted differently, or add a different model algorithm. These can either replace or add to the existing pipeline.
