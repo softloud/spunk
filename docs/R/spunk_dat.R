@@ -19,5 +19,6 @@
 #' @docType data
 #' @usage data(spunk_dat)
 #' @format A dataframe with 285 rows and 12 columns.
-#' @author
+#' @author Mohammed Zafar
+#' @author Kerry Mills
 NULL

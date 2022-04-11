@@ -40,3 +40,8 @@ This is the [packaged analysis](https://github.com/softloud/spunk) accompanying 
 
 References for all resources linked in this analysis are provided in a [zotero collection](https://www.zotero.org/groups/4437063/diet_and_infertility_citations). 
 
+## Contributors
+
+- Maintainer: Charles T. Gray
+- Data extraction: Mohammed Zafar and Kerry Mills
+ 
