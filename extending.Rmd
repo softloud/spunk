@@ -11,15 +11,18 @@ output:
 
 # Code reviewers
 
-Thank you for considering helping out with this project. The most important thing to check is that the code does what the manuscript says it does. 
+This section is for those considering helping out with this project. 
 
-Checking each target in the [`_targets.R`](https://github.com/softloud/spunk/blob/main/_targets.R) file filters to things expected and so forth. 
+The most important thing to check is that the code does what the manuscript says it does. Checking each target in the [`_targets.R`](https://github.com/softloud/spunk/blob/main/_targets.R) file filters to things expected and so forth. 
 
 In this process, adding comments to the code of what your understanding of what it does is very useful. Adding to the documentation of the functions would also be very helpful. Another thing to consider is renaming the targets so that the pipeline conveys the analysis steps clearer. 
 
 Code reviewers may have ideas about the site structure and documentation, as well. 
 
-Do the visualisations answer the questions they are meant to answer? And, are the other analyses that need to be included?
+Most importantly, two questions need to be assessed:
+
+1. Do the visualisations answer the questions they are meant to answer?
+2. And, are the other analyses that need to be included?
 
 Finally, don't forget to update the DESCRIPTION file with your ORCID as a contributor. 
 
@@ -61,6 +64,7 @@ Note, in particular, that circles are code blocks, and squares represent loops.
 ```{r message=FALSE}
 tar_visnetwork(
   # this first argument is only required for static output
+  # https://github.com/ropensci/targets/discussions/819
   callr_arguments = list(spinner = FALSE), 
   targets_only = TRUE)
 ```

@@ -58,7 +58,7 @@ The analyses provided in the associated Cochrane review are summaries and overvi
 
 Researchers may be interested in investigating one specific intervention from the various interventions in the dataset. Here we provide two tables with summary information about interventions in the first, and class in the second. 
 
-See Summary tables in Living analyses for detailed information about the interventions and classes included in this analysis. 
+See [Summary tables](https://softloud.github.io/spunk/summaries.html) in Living analyses for detailed information about the interventions and classes included in this analysis. 
 
 ## Analyse specific classes and interventions
 
