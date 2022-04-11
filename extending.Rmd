@@ -59,13 +59,19 @@ library(tidyverse) # data science functions
 Note, in particular, that circles are code blocks, and squares represent loops.
 
 ```{r message=FALSE}
-tar_visnetwork(targets_only = TRUE)
+tar_visnetwork(
+  # this first argument is only required for static output
+  callr_arguments = list(spinner = FALSE), 
+  targets_only = TRUE)
 ```
 
 Subsections of the pipeline can be viewed by name or by `tidyverse::` selection tools. For example, the pipeline of head to head comparisons can be viewed thus.
 
 ```{r message=FALSE}
-tar_visnetwork(allow = starts_with("hth"))
+tar_visnetwork(
+  # this first argument is only required for static output
+  callr_arguments = list(spinner = FALSE), 
+  allow = starts_with("hth"))
 ```
 
 # Implementing other models
@@ -74,7 +80,10 @@ Here is the pipeline for fitting the network meta-analysis models. Functions are
 
 ```{r}
 # fit dat and fit arms are the most relevant targets for the model implementation
-tar_visnetwork(names = c("fit_dat", "fit_arms"))
+tar_visnetwork(
+  # this first argument is only required for static output
+  callr_arguments = list(spinner = FALSE),
+  names = c("fit_dat", "fit_arms"))
 
 ```
 
