@@ -89,27 +89,27 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_meta_tags-->
   <title>spunk::</title>
 
-  <meta property="description" itemprop="description" content="Reproducible packaged analysis"/>
+  <meta property="description" itemprop="description" content="Reproducible living analysis and dataset"/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="spunk::"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Reproducible packaged analysis"/>
+  <meta property="og:description" content="Reproducible living analysis and dataset"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="spunk::"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="spunk::"/>
-  <meta property="twitter:description" content="Reproducible packaged analysis"/>
+  <meta property="twitter:description" content="Reproducible living analysis and dataset"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["spunk::"]},{"type":"character","attributes":{},"value":["Reproducible packaged analysis\n"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["spunk::"]},{"type":"character","attributes":{},"value":["Reproducible living analysis and dataset\n"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2057,7 +2057,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"spunk::","description":"Reproducible packaged analysis","authors":[]}
+{"title":"spunk::","description":"Reproducible living analysis and dataset","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2106,7 +2106,7 @@ Within-analysis documentation
 <h1>spunk::</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>Reproducible packaged analysis</p></p>
+<p><p>Reproducible living analysis and dataset</p></p>
 </div>
 
 
@@ -2114,17 +2114,40 @@ Within-analysis documentation
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
-<p>This is the <a href="https://github.com/softloud/spunk">packaged analysis</a> accompanying the Cochrane review:</p>
+<p>This is the <a href="https://github.com/softloud/spunk">reproducible packaged living analysis</a> accompanying the Cochrane review:</p>
 <blockquote>
 <p>Nutritional interventions for male infertility: a systematic review and meta-analysis</p>
 </blockquote>
 <p>References for all resources linked in this analysis are provided in a <a href="https://www.zotero.org/groups/4437063/diet_and_infertility_citations">zotero collection</a>.</p>
-<h2 id="contributors">Contributors</h2>
+<h2 id="lead-contributors">Lead contributors</h2>
 <ul>
 <li>Analysis implementation: Charles T. Gray</li>
-<li>Data extraction: Mohammed Zafar and Kerry Mills</li>
+<li>Project lead and data extraction: Mohammed Zafar</li>
+<li>Principal investigator: Kerry Mills</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># don't know what (NA) is appended to list of authors:</span>
+<span class='co'># https://github.com/softloud/spunk/issues/7</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/citation.html'>citation</a></span><span class='op'>(</span><span class='st'>"spunk"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+To cite package &#39;spunk&#39; in publications use:
+
+  Charles Gray, Mohammad Zafar and Kerry Mills (NA). spunk:
+  Nutritional interventions for male infertility: a systematic
+  review and meta-analysis. R package version 0.0.0.9000.
+
+A BibTeX entry for LaTeX users is
+
+  @Manual{,
+    title = {spunk: Nutritional interventions for male infertility: a systematic review and meta-analysis},
+    author = {Charles Gray and Mohammad Zafar and Kerry Mills},
+    note = {R package version 0.0.0.9000},
+  }</code></pre>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
