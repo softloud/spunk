@@ -349,6 +349,16 @@ list(
   # gt rank-rel matrix ------------------------------------------------------
 
   tar_target(
+    get_int_class,
+    function(this_int){
+      int_class %>%
+        filter(intervention == this_int) %>%
+        pull(class) %>%
+        unique()
+    }
+  ),
+
+  tar_target(
     rank_rel_dat,
     {
       rels <- rel_diff %>%
@@ -380,22 +390,37 @@ list(
 
 
       full_join(rels, ranks) %>%
-        mutate(diff = glue("{rel_diff} <br>
-      {rank_diff}")) %>%
-        select(-rel_diff,-rank_diff) %>%
-        pivot_wider(names_from = int_2,
-                    values_from = diff)
+        mutate(
+        diff = glue("{rel_diff} <br>
+      {rank_diff}"),
+        class_1 = map_chr(int_1, get_int_class),
+        class_2 = map_chr(int_2, get_int_class)
+        )
     },
     pattern = map(rel_diff, rank_diff),
     iteration = "list"
   ),
 
+  tar_target(
+    rank_rel_wide,
+    rank_rel_dat %>%
+      select(-rel_diff,-rank_diff) %>%
+      pivot_wider(names_from = int_2,
+                  values_from = diff,
+                  id_cols = c(class_1, class_2)
+                  )
+      ,
+    pattern = map(rank_rel_dat),
+    iteration = "list"
+
+  ),
+
   tar_target(rank_rel_gt,
              {
-               this_outcome <- rank_rel_dat$outcome %>% unique()
+               this_outcome <- rank_rel_wide$outcome %>% unique()
 
                this_gt <-
-                 rank_rel_dat %>%
+                 rank_rel_wide %>%
                  select(-outcome) %>%
                  rename(Intervention = int_1) %>%
                  gt() %>%
@@ -429,7 +454,7 @@ list(
                gtsave(this_gt, gt_path)
 
              },
-             pattern = map(rank_rel_dat)),
+             pattern = map(rank_rel_wide)),
 
 
   # nma net -----------------------------------------------------------------
