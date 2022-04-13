@@ -1,0 +1,53 @@
+---
+title: "Methods"
+description: |
+  Draft as of 13 April 2022
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+# Network meta-analysis
+
+Network meta-analyses of mean difference in interventions compared to placebo were performed with the R package multinma and presented in Summary of Findings metatables (see Figures). Where more than one control was reported in a study, a control was chosen randomly. Sensitivity analyses (Figure X: Sensitivity analyses) were performed on all interventions where at least 3 studies reported the outcome measure. Meta-analyses were performed and compared to leave-one-out sensitivity analysis, as well as network meta-analysis estimates.    
+
+One of the big challenges of undertaking combinatorially many model comparisons is that traditional diagnostics are not feasible. Thus, given the necessary time required for design of new visualisations, that is, ways of summarising models at scale, limits the statistical analysis within what is, for all projects, a finite amount of time.  For example, a single treatment comparison in meta-analysis would have an arm-level forest plot, arm-level funnel plot, as well as reported statistics. Exploratory data results would also demonstrate issues such as publication bias. Whilst researchers will likely go to that level for some observations, what is needed first is a summary visualisation to know which observations to investigate. It is no longer easy to eyeball the data and diagnose statistically. Thus there is much that can be extended on this analysis, both computationally and statistically, which naturally extends to further work in visualisations and exploratory data analysis.  
+
+# Summarising multiple comparisons across many models 
+
+The visualisations presented in Figures use the R package gpplot2 to attempt to answer particular questions we usually ask, but over many, many analyses and comparisons between different subgroups.These priminary results are an overview, designed more to statistically define the questions for future analysis.  
+Summary of Findings
+
+The Summary of Findings tables contain three components: 
+
+1. Network figures that show pairwise comparison and classes;
+2. A summary of table-level properties;
+3. A table of network meta-analysis intervention compared to placebo estimates.
+
+A network figure compares the  The network diagram also provides a diagnostic check in labelling of classes, as those with domain knowledge can identify from the visualisation if there is a misunderstanding by the person, whose primary domain is data science, understaking the analysis. The table-level properties also provide a place to check for incorrect labelling in the analysis. Network meta-analysis is a random effects model that compares between treatments, accounting for the variance between studies that report each treatment. 
+
+The network-informed design of the model enables the inclusion of studies that used different controls, by estimating the missing comparisons. Thus the table provides network meta-analysis estimates for the comparison of each treatment with placebo, and visually allows for the comparison between aggregated overall treatment estimates, across all studies that reported that intervention for that outcome. Further statistics could be reported in this table, such as estimates of the study variance. However, the confidence interval plotted is arguably a more informative way of conveying differences in variance, and a person using those results in future research would likely access the open source and access the estimates as a machine-readable dataset. 
+
+# Sensitivity 
+It’s easy for traditional diagnostics to become less informative as the number of comparisons combinatorially grows. The sensitivity analysis presented does not provide as much in-depth information about each comparison for each outcome, but it does provide a means of getting an overview of two different diagnostic questions of interest:
+
+Do the studies report heterogeneous results? If one study is randomly left out of the analysis (MA -1 study) do the results agree with meta-analysis results (MA) on the full set of studies?
+How do the network meta-analysis results (NMA) compare with the meta-analysis (MA) results? 
+    Comparison matrices
+Comparison matrices provide a means of comparing the difference between point estimates and bounds  between two interventions. 
+
+# Statistically extending this analysis
+
+There are several extensions to the network meta-analysis that could be explored in future studies. This is an analysis on mean difference because debugging the calculation of the standard error for standardised mean difference slowed the project down. If outcome measures are on commensurate scales, then this is not a problem, however, the more diversity in scales will mean the model estimates are less reliable. Thus, it would be preferable to rework the analysis to calculate standardised mean difference. 
+
+In addition, network meta-regression could be used to explore differences with class. Exploratory data analysis, in addition to that which was discussed above,  might find publication bias, and this could be controlled for by down-weighting those observations, or removing them. Threshold analysis would be a good way of identifying which studies are not informing the decisions from the model. 
+
+
+# Computationally extending this living analysis
+
+Quality assurance is a genuine concern in the implementation of the algorithm, necessarily requiring an  expert in something that is crucially not the domain of the scientific project. Means of checking and communicating what assumptions were made with domain-knowledge experts on the project have the additional benefit of creating a an extensible living analysis that other researchers can improve on. Code review is also a necessary component of such an undertaking.
+An example of how computational reproducibility was used to solve a problem is illustrated on the - add discussion of class 
+These tools also provide a means of sharing the analysis as open source that can be readily extended and improved upon. So the accompanying computational resource is a living analysis, to which new literature can be easily contributed. Crucially, these resources provide a means of sharing machine-readable data that informed the analysis. Extending the analysis codebase or contributing new literature to the dataset requires an in-depth discussion of computational implementation. An accompanying online resource for this purpose is provided, along with the open-source living analysis. Citations are provided as a zotero collection.   
