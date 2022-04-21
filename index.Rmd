@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE)
 # https://rstudio.github.io/distill/publish_website.html#github-pages
 
 library(tidyverse)
-library(sperm)
+library(spunk)
 library(targets)
 library(gt)
 
@@ -28,7 +28,7 @@ library(gt)
 ```{r pkg, message=FALSE}
 # packages used in this readme
 library(tidyverse)
-library(sperm)
+library(spunk)
 library(targets)
 library(gt)
 
@@ -44,9 +44,9 @@ References for all resources linked in this analysis are provided in a [zotero c
 
 ## Lead contributors
 
-- Analysis implementation: Charles T. Gray
 - Project lead and data extraction: Mohammed Zafar
 - Principal investigator: Kerry Mills
+- Analysis implementation: Charles T. Gray
 
 ```{r echo=TRUE}
 
