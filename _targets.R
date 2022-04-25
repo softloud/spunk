@@ -1,6 +1,8 @@
-suppressMessages({
+library(targets)
+
+#suppressMessages({
   library(tidyverse)
-  library(sperm)
+  library(spunk)
   library(janitor)
   library(targets)
   library(multinma)
@@ -10,8 +12,7 @@ suppressMessages({
   conflicted::conflict_prefer("filter", "dplyr")
   options(mc.cores = parallel::detectCores())
 
-  })
-
+ # })
 
 # list.files("R", full.names = TRUE) %>% map(source)
 
