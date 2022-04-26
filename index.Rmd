@@ -34,7 +34,7 @@ library(gt)
 
 ```
 
-This is the [reproducible packaged living analysis](https://github.com/softloud/spunk) accompanying the Cochrane review:
+This is the [reproducible packaged living analysis](https://github.com/softloud/spunk) accompanying the evidence synthesis:
 
 > Nutritional interventions for male infertility: a systematic review and meta-analysis
 
