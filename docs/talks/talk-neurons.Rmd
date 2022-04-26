@@ -1,0 +1,181 @@
+---
+title: 'spunk::'
+subtitle: Collaborative data science through living analyses
+author: "Dr Charles T. Gray, Data Analytics"
+date: 'Neurons Inc Science Club, Friday 22 April 2022'
+output: 
+  ioslides_presentation:
+    widescreen: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align = 'center',
+  error = TRUE,
+  echo = FALSE)
+
+library(tidyverse)
+
+```
+
+# It's a bit much 
+
+---
+
+<div class = "columns-2">
+
+```{r out.width="80%", fig.show="hold", fig.align='default'}
+knitr::include_graphics("me-before-you.webp")
+
+```
+
+### Interoperability,
+
+### accessibility,
+
+### & reproducibility,
+
+### *before* 
+
+### finalising analyses 
+
+</div>
+
+<div class = "notes">
+- traditional blackbox statistics
+- shame
+- final steps should be at the start
+- facilitates collaboration
+- science should be collaborative
+- reproducibility and analysis should be a romance, not a war
+</div>
+
+
+
+## [Living analysis](https://covid-nma.com/) is the smallest perk for the analyst | It's all a bit much, though
+
+```{r out.width="70%"}
+knitr::include_graphics("wisdom_of_the_ancients.png")
+```
+
+Image source: xkcd
+
+<div class = "notes">
+- living analysis is very spiffy, show Cochrane
+- but is least best thing
+- better is scope for collaboration
+- much better for analysis design: what figures need to be created? Make a mock up, understanding the structure of data outputs is golden
+- BUT challenges are manifold
+- Respect collaborative science as much as, say, statistics
+- Allow for time to do it (contracts are ~1 year for both my analyses)
+</div>
+
+# `spunk::` | What is this?
+
+## **spunk**
+
+*noun*
+
+1.INFORMAL
+
+courage and determination.
+
+"she's got no spunk, or she'd have left him long ago"
+
+(Oxford English Dictionary)
+
+<div class = "notes">
+You may or may not be familiar with this definition of spunk
+
+</div>
+
+
+## Nope, not that *spunk*
+
+### According to Urban Dictionary...
+
+## **spunk**
+
+Refers to semenal fluid, and also means to ejaculate.
+
+1. *If you spunk on the wall, wipe it up!*
+2. *The spunk was stuck to his ear.*
+
+(Urban Dictionary)
+
+## If the `spunk::` fits
+
+`spunk::` is the [reproducible packaged living analysis](https://github.com/softloud/spunk) accompanying the Cochrane review:
+
+
+</br>
+
+
+### **Nutritional interventions for male infertility:** 
+#### *a systematic review and meta-analysis* 
+
+</br>
+
+
+</br>
+
+which examines nutritional interventions for [sperm](https://www.urbandictionary.com/define.php?term=spunk) motility, sperm morphology, sperm volume, and sperm count.
+
+<div class = "notes">
+- describe Cochrane https://www.cochrane.org/
+- define systematic review and meta-analysis
+- now that we've defined the project, we will not discuss infertility for the rest of talk
+- what did I learn from this, what opinions have I formed, will be the rest of this talk
+</div>
+
+# Who the living analysis is for
+
+## Analysts care about the science of data | Domain experts care more about the stories [data](https://softloud.github.io/spunk/dataset.html) tell
+
+```{r out.width="70%"}
+knitr::include_graphics("show-off.gif")
+```
+
+
+<div class = "notes">
+- fancy models pressure from superiors and peers
+- but my stats are crap; I need help
+- fancy stats may not be the most significant contribution of a scientific project
+- domain experts are often not primarily statisticians
+- domain experts often have *some* ability, how to cater for them, without ego
+- they can't learn all of R
+- good argument to make 
+- show ?spunk_dat
+</div>
+
+## Collaborative data science
+
+### Implementing other models
+
+</br>
+
+Here is the pipeline for fitting the network meta-analysis models. Functions are documented using `roxygen::2` and can be searched using R, for example, 
+
+`?smd_calc`... 
+
+</br>
+
+</br>
+
+From [Contributing](https://softloud.github.io/spunk/extending.html)
+
+<div class = "notes">
+- analyses are rudimentory
+- patchable
+- more effort put into collaboration than into fancy stats
+- hard, time consuming, but 
+- transparent, accessible, reproducible (for yourself!)
+</div>
+
+## Living analysis
+
+When the data is updated, the [analyses](https://softloud.github.io/spunk/sof.html) can be updated.
+
+
+
+# Tak for at lytte :) | *Thanks for listening*
