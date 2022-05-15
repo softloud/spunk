@@ -35,9 +35,35 @@ list(
              }),
 
 
+  tar_target(
+
+    # Suddenly intervention is being read as a list
+    # This problem was first observed 27 of April,
+    # so, will likely be the result of a datapoint.
+    # We need to move along with the rest of the paper,
+    # but it would be really good to have a look into this data
+    # discrepency
+    count_unlisted,
+    count_obs %>%
+      filter(!is.na(study_id)) %>%
+      mutate(
+        across(
+        c(grouped_intervention, major_intervention_grouping),
+        as.character
+        )
+      ) %>%
+      mutate(
+        across(
+          c(contains("_sd"), contains("_mean"),
+            contains("_n")),
+          as.numeric
+        )
+      )
+  ),
+
   tar_target(wide_obs,
              map2_df(
-               list(count_obs,
+               list(count_unlisted,
                     volume_obs,
                     motility_obs,
                     morphology_obs),
@@ -96,7 +122,7 @@ list(
 
 
 
-  # attemp multilevel errors ------------------------------------------------
+  # attempt multilevel errors (doesn't work) ------------------------------------------------
 
   tar_target(
     obs_control,
@@ -159,14 +185,30 @@ list(
   tar_target(
     fit_dat,
     outcome_groups %>%
+      mutate(
+        class = if_else(
+          intervention == "vitamin c/e",
+          "vitamins",
+          class
+        )
+      ) %>%
       smd_calc(),
     pattern = map(outcome_groups),
     iteration = "list"
   ),
 
+  tar_target(
+    fit_class_qa,
+    fit_dat %>%
+      group_by(outcome, intervention) %>%
+      summarise(n_class = n_distinct(class)) %>%
+      filter(n_class > 1),
+    pattern = map(fit_dat),
+    iteration = "list"
+  ),
 
 
-  # fit models --------------------------------------------------------------
+  # fit models (using arm-based MD) --------------------------------------------------------------
 
 
   tar_target(
@@ -349,16 +391,6 @@ list(
   # gt rank-rel matrix ------------------------------------------------------
 
   tar_target(
-    get_int_class,
-    function(this_int){
-      int_class %>%
-        filter(intervention == this_int) %>%
-        pull(class) %>%
-        unique()
-    }
-  ),
-
-  tar_target(
     rank_rel_dat,
     {
       rels <- rel_diff %>%
@@ -392,9 +424,7 @@ list(
       full_join(rels, ranks) %>%
         mutate(
         diff = glue("{rel_diff} <br>
-      {rank_diff}"),
-        class_1 = map_chr(int_1, get_int_class),
-        class_2 = map_chr(int_2, get_int_class)
+      {rank_diff}")
         )
     },
     pattern = map(rel_diff, rank_diff),
@@ -402,15 +432,43 @@ list(
   ),
 
   tar_target(
+    rank_rel_class,
+    left_join(rank_rel_dat, int_class,
+              by = c("int_1" = "intervention")) %>%
+      rename(class_1 = class) %>%
+      left_join(int_class,
+                by = c("int_2" = "intervention")) %>%
+      rename(class_2 = class)
+      # mutate(
+      #   class_1 = map_chr(int_1, get_int_class),
+      #   class_2 = map_chr(int_2, get_int_class)
+      # )
+
+    ,
+    pattern = map(rank_rel_dat),
+    iteration = "list"
+  ),
+
+  tar_target(
+    rank_rel_class_key,
+    rank_rel_class %>%
+      select(outcome, class_1) %>%
+      distinct() %>%
+      rename(class = class_1),
+    pattern = map(rank_rel_class),
+    iteration = "list"
+  ),
+
+  tar_target(
     rank_rel_wide,
-    rank_rel_dat %>%
+    rank_rel_class %>%
       select(-rel_diff,-rank_diff) %>%
       pivot_wider(names_from = int_2,
                   values_from = diff,
-                  id_cols = c(class_1, class_2)
+                  id_cols = c(outcome, int_1)
                   )
       ,
-    pattern = map(rank_rel_dat),
+    pattern = map(rank_rel_class),
     iteration = "list"
 
   ),
