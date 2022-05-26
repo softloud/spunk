@@ -1,18 +1,18 @@
 library(targets)
 
 #suppressMessages({
-  library(tidyverse)
-  library(spunk)
-  library(janitor)
-  library(targets)
-  library(multinma)
-  library(metafor)
-  library(glue)
-  library(gt)
-  conflicted::conflict_prefer("filter", "dplyr")
-  options(mc.cores = parallel::detectCores())
+library(tidyverse)
+library(spunk)
+library(janitor)
+library(targets)
+library(multinma)
+library(metafor)
+library(glue)
+library(gt)
+conflicted::conflict_prefer("filter", "dplyr")
+options(mc.cores = parallel::detectCores())
 
- # })
+# })
 
 # list.files("R", full.names = TRUE) %>% map(source)
 
@@ -31,12 +31,11 @@ list(
                         intervention = grouped_intervention,
                         moderator = type_of_infertility) %>%
                  select(outcome, study, everything()) %>%
-                 select(-starts_with("x"),-intervention_detailed,-study_id)
+                 select(-starts_with("x"), -intervention_detailed, -study_id)
              }),
 
 
   tar_target(
-
     # Suddenly intervention is being read as a list
     # This problem was first observed 27 of April,
     # so, will likely be the result of a datapoint.
@@ -46,19 +45,15 @@ list(
     count_unlisted,
     count_obs %>%
       filter(!is.na(study_id)) %>%
-      mutate(
-        across(
+      mutate(across(
         c(grouped_intervention, major_intervention_grouping),
         as.character
-        )
-      ) %>%
-      mutate(
-        across(
-          c(contains("_sd"), contains("_mean"),
-            contains("_n")),
-          as.numeric
-        )
-      )
+      )) %>%
+      mutate(across(
+        c(contains("_sd"), contains("_mean"),
+          contains("_n")),
+        as.numeric
+      ))
   ),
 
   tar_target(wide_obs,
@@ -132,7 +127,7 @@ list(
       mutate(n_per_study = n_distinct(control_n)) %>%
       sample_n(1) %>%
       select(-n_per_study) %>%
-      rename_with(~ str_remove(.x, "control_")) %>%
+      rename_with( ~ str_remove(.x, "control_")) %>%
       rename(intervention = control) %>%
       mutate(
         control = TRUE,
@@ -150,7 +145,7 @@ list(
     obs_int,
     model_dat %>%
       select(-starts_with("control")) %>%
-      rename_with(~ str_remove(.x, "intervention_")) %>%
+      rename_with( ~ str_remove(.x, "intervention_")) %>%
       mutate(control = FALSE)
 
   ),
@@ -185,14 +180,32 @@ list(
   tar_target(
     fit_dat,
     outcome_groups %>%
+      mutate(class = if_else(
+        intervention == "vitamin c/e",
+        "vitamins",
+        class
+      )) %>%
+      smd_calc() %>%
       mutate(
-        class = if_else(
-          intervention == "vitamin c/e",
-          "vitamins",
-          class
-        )
-      ) %>%
-      smd_calc(),
+        class = str_to_sentence(class),
+        intervention = str_to_sentence(intervention),
+        intervention =
+          str_replace(intervention,
+                      "Zinc/zinc", "Zinc/Zinc") %>%
+          str_replace("d3", "D3") %>%
+          str_replace("q10", "Q10") %>%
+          str_replace("l-", "L-") %>%
+          str_replace("/no", "/No") %>%
+          str_replace("c/e", "C/E") %>%
+          str_replace("c/", "C/") %>%
+          str_replace("ZinC", "Zinc") %>%
+          str_replace("combos", "comb") %>%
+          str_replace("\\+ala$", "\\+ALA") %>%
+          str_replace("\\se", "\\sE") %>%
+          str_replace("/min", "/Min"),
+        class = str_replace(class, "combos", "comb") %>%
+          str_replace("/min", "/Min")
+      ),
     pattern = map(outcome_groups),
     iteration = "list"
   ),
@@ -220,7 +233,7 @@ list(
       sample_size = n,
       study = study,
       trt = intervention,
-      trt_ref = "placebo/no treatment",
+      trt_ref = "Placebo/No treatment",
       trt_class = class
 
     ) %>%
@@ -267,6 +280,33 @@ list(
   #         ),
   #   pattern = map(fit_dat)
   # ),
+  tar_target(
+    nma_sucra,
+    {
+      this_outcome <-
+        fit_arms$network$agd_arm$outcome %>% unique()
+
+
+      multinma::posterior_rank_probs(fit_arms,
+                                     lower_better = FALSE,
+                                     sucra = TRUE) %>%
+        plot() +
+        scale_x_continuous(breaks = seq(0, 25, 5)) +
+        theme(axis.text = element_text(size = 6),
+              strip.text = element_text(size = 5)) +
+        labs(
+          title = sprintf("SUCRA"),
+          subtitle = str_to_sentence(this_outcome),
+          x = "Rank"
+        )
+
+      ggsave(sprintf("img/%s-sucra.png",
+                     this_outcome),
+             limitsize = FALSE)
+    },
+    pattern = map(fit_arms),
+    iteration = "list"
+  ),
 
 
   # extract model estimates -------------------------------------------------
@@ -287,7 +327,7 @@ list(
         lb = x2_5_percent,
         ub = x97_5_percent
       ) %>%
-      rename_with( ~ glue("{.x}_rank")) %>%
+      rename_with(~ glue("{.x}_rank")) %>%
       mutate(outcome = fit_arms$network$agd_arm$outcome %>% unique()) %>%
       select(outcome, everything()),
     pattern = map(fit_arms),
@@ -309,7 +349,7 @@ list(
         lb = x2_5_percent,
         ub = x97_5_percent
       ) %>%
-      rename_with( ~ glue("{.x}_rel"))  %>%
+      rename_with(~ glue("{.x}_rel"))  %>%
       mutate(outcome = fit_arms$network$agd_arm$outcome %>% unique()) %>%
       select(outcome, everything()),
     pattern = map(fit_arms),
@@ -321,7 +361,7 @@ list(
              function(x, y) {
                diff <- abs(x - y)
 
-               if_else(x < y, diff,-diff)
+               if_else(x < y, diff, -diff)
              }),
 
 
@@ -333,17 +373,17 @@ list(
       mutate(intervention_rank = nma_rank$intervention_rank %>%
                rep(times = nrow(nma_rank))) %>%
       left_join(nma_rank %>%
-                  rename_with( ~ glue("{.x}_comp"),-intervention_rank)) %>%
+                  rename_with(~ glue("{.x}_comp"), -intervention_rank)) %>%
       mutate(
         mean_diff = diff_calc(mean_rank, mean_rank_comp),
         sd_diff = diff_calc(sd_rank, sd_rank_comp),
         lb_diff = diff_calc(lb_rank, lb_rank_comp),
         ub_diff = diff_calc(ub_rank, ub_rank_comp)
       ) %>%
-      mutate(rank_diff =
-               glue(
-                 "{round(mean_diff)} ({round(lb_diff)}, {round(ub_diff)})"
-               )) %>%
+      mutate(
+        rank_diff =
+          glue("{round(mean_diff)} ({round(lb_diff)}, {round(ub_diff)})")
+      ) %>%
       select(
         outcome,
         int_1 = first_rank,
@@ -363,7 +403,7 @@ list(
       mutate(intervention_rel = nma_rel$intervention_rel %>%
                rep(times = nrow(nma_rel))) %>%
       left_join(nma_rel %>%
-                  rename_with( ~ glue("{.x}_comp"),-intervention_rel)) %>%
+                  rename_with(~ glue("{.x}_comp"), -intervention_rel)) %>%
       mutate(
         mean_diff = diff_calc(mean_rel, mean_rel_comp),
         sd_diff = diff_calc(sd_rel, sd_rel_comp),
@@ -422,10 +462,8 @@ list(
 
 
       full_join(rels, ranks) %>%
-        mutate(
-        diff = glue("{rel_diff} <br>
-      {rank_diff}")
-        )
+        mutate(diff = glue("{rel_diff} <br>
+      {rank_diff}"))
     },
     pattern = map(rel_diff, rank_diff),
     iteration = "list"
@@ -439,10 +477,10 @@ list(
       left_join(int_class,
                 by = c("int_2" = "intervention")) %>%
       rename(class_2 = class)
-      # mutate(
-      #   class_1 = map_chr(int_1, get_int_class),
-      #   class_2 = map_chr(int_2, get_int_class)
-      # )
+    # mutate(
+    #   class_1 = map_chr(int_1, get_int_class),
+    #   class_2 = map_chr(int_2, get_int_class)
+    # )
 
     ,
     pattern = map(rank_rel_dat),
@@ -462,12 +500,13 @@ list(
   tar_target(
     rank_rel_wide,
     rank_rel_class %>%
-      select(-rel_diff,-rank_diff) %>%
-      pivot_wider(names_from = int_2,
-                  values_from = diff,
-                  id_cols = c(outcome, int_1)
-                  )
-      ,
+      select(-rel_diff, -rank_diff) %>%
+      pivot_wider(
+        names_from = int_2,
+        values_from = diff,
+        id_cols = c(outcome, int_1)
+      )
+    ,
     pattern = map(rank_rel_class),
     iteration = "list"
 
@@ -507,8 +546,7 @@ list(
                  message()
 
                write_rds(this_gt,
-                         sprintf("img/%s-matrix.rds", this_outcome)
-                         )
+                         sprintf("img/%s-matrix.rds", this_outcome))
                gtsave(this_gt, gt_path)
 
              },
@@ -521,21 +559,26 @@ list(
              {
                this_outcome <- fit_arms$network$agd_arm$outcome %>% unique()
 
-               plot(
-                 fit_arms$network,
-                 weight_nodes = TRUE,
-                 weight_edges = TRUE,
-                 show_trt_class = TRUE
-               )  +
+               fit_arms$network %>%
+                 plot(
+                   weight_nodes = TRUE,
+                   weight_edges = TRUE,
+                   show_trt_class = TRUE
+                 )  +
                  ggplot2::theme(
                    text = element_text(size = 8),
-                   legend.text = element_text(size = 10),
+                   legend.text = element_text(size = 12),
                    legend.position = "bottom",
                    legend.box = "vertical"
                  )
 
                sprintf("img/%s-net.png", this_outcome) %>%
-                 ggsave()
+                 ggsave(
+                   filename = .,
+                   width = 4200,
+                   height = 3000,
+                   units = "px"
+                 )
              },
              pattern = map(fit_arms)),
 
@@ -574,7 +617,6 @@ list(
         t() %>%
         as_tibble(rownames = "cat") %>%
         rename(description = V1) %>%
-        mutate(across(everything(), str_to_sentence)) %>%
         gt() %>%
         cols_width(cat ~ px(100)) %>%
         cols_width(description ~ px(300)) %>%
@@ -660,8 +702,6 @@ list(
     this_gt <-
       sof_dat %>%
       select(-outcome) %>%
-      mutate(intervention = str_to_sentence(intervention),
-             class = str_to_sentence(class)) %>%
       gt(groupname_col = "class") %>%
       cols_label(
         intervention = "Intervention",
@@ -794,21 +834,21 @@ list(
   # all ma results ----------------------------------------------------------
 
 
-  tar_target(ma_results_comp,
-             bind_cols(hth_comp,
-                       hth_extract_ma) %>%
-    rename_with(
-      ~str_remove(.x, "_ma")
-    ) %>%
+  tar_target(
+    ma_results_comp,
+    bind_cols(hth_comp,
+              hth_extract_ma) %>%
+      rename_with(~ str_remove(.x, "_ma")) %>%
       mutate(analysis = "MA")
-      )
-    ,
+  )
+  ,
 
-  tar_target(ma_results_less,
-             bind_cols(hth_comp, hth_extract_less) %>%
-              rename_with( ~str_remove(.x, "_less")) %>%
-               mutate(analysis = "MA -1 study")
-               ),
+  tar_target(
+    ma_results_less,
+    bind_cols(hth_comp, hth_extract_less) %>%
+      rename_with(~ str_remove(.x, "_less")) %>%
+      mutate(analysis = "MA -1 study")
+  ),
 
   tar_target(
     ma_nma,
@@ -818,49 +858,41 @@ list(
         select(outcome,
                intervention = intervention_rel,
                everything()) %>%
-        rename_with(~str_remove(.x, "_rel")) %>%
+        rename_with( ~ str_remove(.x, "_rel")) %>%
         select(-sd) %>%
-        mutate(
-          analysis = "NMA"
-        )
+        mutate(analysis = "NMA")
     ),
     pattern = map(nma_rel)
   ),
 
-  tar_target(
-    ma_dat,
-    bind_rows(ma_results_comp,
-              ma_results_less,
-              ma_nma)
-  ),
+  tar_target(ma_dat,
+             bind_rows(ma_results_comp,
+                       ma_results_less,
+                       ma_nma)),
 
-  tar_target(
-    ma_plot, {
-      ma_dat %>%
-        ggplot(aes(colour = analysis)) +
-        geom_segment(
-          aes(x = lb, xend = ub,
-              y = analysis, yend = analysis)
-        ) +
-        geom_point(
-          aes(x = mean, y = analysis)
-        ) +
-        facet_grid(intervention ~ outcome, scales = "free") +
-        theme_minimal() +
-        labs(
-          title = "Sensitivity analysis: mean point estimates and 95% confidence intervals",
-          subtitle = "Comparison of NMA, MA, and MA with one study removed",
-          x = "Outcome measure",
-          y = "Intervention by MA, MA less one study, and NMA",
-          caption = "Analyses were performed on interventions reported by at least 3 studies."
-        ) +
-        theme(
-          legend.position = "none"
-        )
+  tar_target(ma_plot, {
+    ma_dat %>%
+      ggplot(aes(colour = analysis)) +
+      geom_segment(aes(
+        x = lb,
+        xend = ub,
+        y = analysis,
+        yend = analysis
+      )) +
+      geom_point(aes(x = mean, y = analysis)) +
+      facet_grid(intervention ~ outcome, scales = "free") +
+      theme_minimal() +
+      labs(
+        title = "Sensitivity analysis: mean point estimates and 95% confidence intervals",
+        subtitle = "Comparison of NMA, MA, and MA with one study removed",
+        x = "Outcome measure",
+        y = "Intervention by MA, MA less one study, and NMA",
+        caption = "Analyses were performed on interventions reported by at least 3 studies."
+      ) +
+      theme(legend.position = "none")
 
-      ggsave("img/sensitivity.png")
-    }
-  ),
+    ggsave("img/sensitivity.png")
+  }),
 
   NULL
 )
