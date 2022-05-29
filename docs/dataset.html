@@ -93,8 +93,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2022-04-13"/>
-  <meta property="article:created" itemprop="dateCreated" content="2022-04-13"/>
+  <meta property="article:published" itemprop="datePublished" content="2022-05-29"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-05-29"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="spunk::: Machine-readable data"/>
@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Machine-readable data"]},{"type":"character","attributes":{},"value":["Using these data in future analyses\n"]},{"type":"character","attributes":{},"value":["2022-04-13"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Machine-readable data"]},{"type":"character","attributes":{},"value":["Using these data in future analyses\n"]},{"type":"character","attributes":{},"value":["2022-05-29"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2040,7 +2040,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2060,7 +2060,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Machine-readable data","description":"Using these data in future analyses","authors":[],"publishedDate":"2022-04-13T00:00:00.000+02:00"}
+{"title":"Machine-readable data","description":"Using these data in future analyses","authors":[],"publishedDate":"2022-05-29T00:00:00.000+02:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2083,7 +2083,6 @@ Living analyses
 <a href="sensitivity.html">Sensitivity</a>
 </div>
 </div>
-<a href="methods.html">Methods</a>
 <a href="extending.html">Contributing</a>
 </div>
 <div class="nav-right">
@@ -2121,7 +2120,8 @@ Within-analysis documentation
 <ul>
 <li><a href="#about-the-dataset">About the dataset</a></li>
 <li><a href="#more-specific-analyses">More specific analyses</a></li>
-<li><a href="#analyse-specific-classes-and-interventions">Analyse specific classes and interventions</a></li>
+<li><a href="#analyse-specific-classes-and-interventions">Analyse
+specific classes and interventions</a></li>
 <li><a href="#exporting-data">Exporting data</a></li>
 </ul>
 </nav>
@@ -2134,7 +2134,7 @@ Within-analysis documentation
 <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_pattern.html'>head</a></span><span class='op'>(</span><span class='va'>spunk_dat</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 6 × 12
+<pre><code># A tibble: 6 × 13
   outcome intervention  class moderator study control intervention_me…
   &lt;chr&gt;   &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;
 1 count   omega-3 fatt… omeg… varicoce… abba… placeb…             81.6
@@ -2143,9 +2143,9 @@ Within-analysis documentation
 4 count   zinc/zinc + … mine… varicoce… aziz… placeb…             47.6
 5 count   zinc/zinc + … mine… varicoce… aziz… placeb…             39.6
 6 count   folic acid    vita… varicoce… aziz… placeb…             49.1
-# … with 5 more variables: intervention_sd &lt;dbl&gt;,
+# … with 6 more variables: intervention_sd &lt;dbl&gt;,
 #   intervention_n &lt;dbl&gt;, control_mean &lt;dbl&gt;, control_sd &lt;dbl&gt;,
-#   control_n &lt;dbl&gt;</code></pre>
+#   control_n &lt;dbl&gt;, mean_difference &lt;dbl&gt;</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2172,7 +2172,8 @@ Within-analysis documentation
 <pre><code> [1] &quot;outcome&quot;           &quot;intervention&quot;      &quot;class&quot;            
  [4] &quot;moderator&quot;         &quot;study&quot;             &quot;control&quot;          
  [7] &quot;intervention_mean&quot; &quot;intervention_sd&quot;   &quot;intervention_n&quot;   
-[10] &quot;control_mean&quot;      &quot;control_sd&quot;        &quot;control_n&quot;        </code></pre>
+[10] &quot;control_mean&quot;      &quot;control_sd&quot;        &quot;control_n&quot;        
+[13] &quot;mean_difference&quot;  </code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2181,12 +2182,21 @@ Within-analysis documentation
 </code></pre>
 </div>
 </div>
-<p>The analyses provided in the associated Cochrane review are summaries and overviews. These data provide a means of doing several different future analyses.</p>
+<p>The analyses provided in the associated Cochrane review are summaries
+and overviews. These data provide a means of doing several different
+future analyses.</p>
 <h2 id="more-specific-analyses">More specific analyses</h2>
-<p>Researchers may be interested in investigating one specific intervention from the various interventions in the dataset. Here we provide two tables with summary information about interventions in the first, and class in the second.</p>
-<p>See <a href="https://softloud.github.io/spunk/summaries.html">Summary tables</a> in Living analyses for detailed information about the interventions and classes included in this analysis.</p>
-<h2 id="analyse-specific-classes-and-interventions">Analyse specific classes and interventions</h2>
-<p>These data can be readily accessed by filtering by intervention using <code>tidyverse::</code>.</p>
+<p>Researchers may be interested in investigating one specific
+intervention from the various interventions in the dataset. Here we
+provide two tables with summary information about interventions in the
+first, and class in the second.</p>
+<p>See <a href="https://softloud.github.io/spunk/summaries.html">Summary
+tables</a> in Living analyses for detailed information about the
+interventions and classes included in this analysis.</p>
+<h2 id="analyse-specific-classes-and-interventions">Analyse specific
+classes and interventions</h2>
+<p>These data can be readily accessed by filtering by intervention using
+<code>tidyverse::</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
@@ -2196,7 +2206,7 @@ Within-analysis documentation
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>intervention</span> <span class='op'>==</span> <span class='st'>"folic acid"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 13 × 12
+<pre><code># A tibble: 13 × 13
    outcome intervention class moderator study control intervention_me…
    &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;
  1 count   folic acid   vita… varicoce… aziz… placeb…            49.1 
@@ -2212,11 +2222,13 @@ Within-analysis documentation
 11 morpho… folic acid   vita… subferti… silv… placeb…            23.9 
 12 morpho… folic acid   vita… oligoast… raig… placeb…             6   
 13 morpho… folic acid   vita… subferti… wong… placeb…             2.28
-# … with 5 more variables: intervention_sd &lt;dbl&gt;,
+# … with 6 more variables: intervention_sd &lt;dbl&gt;,
 #   intervention_n &lt;dbl&gt;, control_mean &lt;dbl&gt;, control_sd &lt;dbl&gt;,
-#   control_n &lt;dbl&gt;</code></pre>
+#   control_n &lt;dbl&gt;, mean_difference &lt;dbl&gt;</code></pre>
 </div>
-<p>Filters can be combined. For example, we might only interested in studies that reported morphology comparisons with folic acid and placebo.</p>
+<p>Filters can be combined. For example, we might only interested in
+studies that reported morphology comparisons with folic acid and
+placebo.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
@@ -2227,18 +2239,19 @@ Within-analysis documentation
   <span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 4 × 12
+<pre><code># A tibble: 4 × 13
   outcome  intervention class moderator study control intervention_me…
   &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;
 1 morphol… folic acid   vita… varicoce… aziz… placeb…            53.7 
 2 morphol… folic acid   vita… subferti… silv… placeb…            23.9 
 3 morphol… folic acid   vita… oligoast… raig… placeb…             6   
 4 morphol… folic acid   vita… subferti… wong… placeb…             2.28
-# … with 5 more variables: intervention_sd &lt;dbl&gt;,
+# … with 6 more variables: intervention_sd &lt;dbl&gt;,
 #   intervention_n &lt;dbl&gt;, control_mean &lt;dbl&gt;, control_sd &lt;dbl&gt;,
-#   control_n &lt;dbl&gt;</code></pre>
+#   control_n &lt;dbl&gt;, mean_difference &lt;dbl&gt;</code></pre>
 </div>
-<p>Or perhaps researchers are interested in all studies that compared coenzyme-q10 with placebo, but allow for combined interventions.</p>
+<p>Or perhaps researchers are interested in all studies that compared
+coenzyme-q10 with placebo, but allow for combined interventions.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
@@ -2247,16 +2260,16 @@ Within-analysis documentation
     <span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 4 × 12
+<pre><code># A tibble: 4 × 13
   outcome  intervention class moderator study control intervention_me…
   &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;
 1 count    coenzyme-q1… diet… oligoast… gopi… placeb…             33.2
 2 count    coenzyme-q1… diet… oligoast… gopi… placeb…             31.6
 3 motility coenzyme-q1… diet… oligoast… gopi… placeb…             57.4
 4 motility coenzyme-q1… diet… oligoast… gopi… placeb…             55.8
-# … with 5 more variables: intervention_sd &lt;dbl&gt;,
+# … with 6 more variables: intervention_sd &lt;dbl&gt;,
 #   intervention_n &lt;dbl&gt;, control_mean &lt;dbl&gt;, control_sd &lt;dbl&gt;,
-#   control_n &lt;dbl&gt;</code></pre>
+#   control_n &lt;dbl&gt;, mean_difference &lt;dbl&gt;</code></pre>
 </div>
 <p>Class-level analysis data can be extracted in a similar manner.</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2267,7 +2280,7 @@ Within-analysis documentation
   <span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 15 × 12
+<pre><code># A tibble: 15 × 13
    outcome intervention class moderator study control intervention_me…
    &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;
  1 count   coenzyme q10 coen… asthenoz… bale… placeb…            44.2 
@@ -2285,12 +2298,14 @@ Within-analysis documentation
 13 morpho… coenzyme q10 coen… oligoast… nadj… placeb…             6.52
 14 morpho… coenzyme q10 coen… oligoast… safa… placeb…             8.2 
 15 morpho… coenzyme q10 coen… oligoast… safa… placeb…            15.2 
-# … with 5 more variables: intervention_sd &lt;dbl&gt;,
+# … with 6 more variables: intervention_sd &lt;dbl&gt;,
 #   intervention_n &lt;dbl&gt;, control_mean &lt;dbl&gt;, control_sd &lt;dbl&gt;,
-#   control_n &lt;dbl&gt;</code></pre>
+#   control_n &lt;dbl&gt;, mean_difference &lt;dbl&gt;</code></pre>
 </div>
 <h1 id="exporting-data">Exporting data</h1>
-<p>These data are then exportable. For example, if we want to export a dataset to a .csv format so that it can be imported into different software platforms.</p>
+<p>These data are then exportable. For example, if we want to export a
+dataset to a .csv format so that it can be imported into different
+software platforms.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># create a dataset object to write</span>
@@ -2303,7 +2318,8 @@ Within-analysis documentation
 </code></pre>
 </div>
 </div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

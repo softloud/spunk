@@ -93,8 +93,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2022-04-13"/>
-  <meta property="article:created" itemprop="dateCreated" content="2022-04-13"/>
+  <meta property="article:published" itemprop="datePublished" content="2022-05-29"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-05-29"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="spunk::: Living analysis"/>
@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Living analysis"]},{"type":"character","attributes":{},"value":["Computationally extending the analysis. \n"]},{"type":"character","attributes":{},"value":["2022-04-13"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Living analysis"]},{"type":"character","attributes":{},"value":["Computationally extending the analysis. \n"]},{"type":"character","attributes":{},"value":["2022-05-29"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2040,7 +2040,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
   <script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
   <link href="site_libs/vis-9.1.0/vis-network.min.css" rel="stylesheet" />
   <script src="site_libs/vis-9.1.0/vis-network.min.js"></script>
@@ -2064,7 +2064,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Living analysis","description":"Computationally extending the analysis.","authors":[],"publishedDate":"2022-04-13T00:00:00.000+02:00"}
+{"title":"Living analysis","description":"Computationally extending the analysis.","authors":[],"publishedDate":"2022-05-29T00:00:00.000+02:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2087,7 +2087,6 @@ Living analyses
 <a href="sensitivity.html">Sensitivity</a>
 </div>
 </div>
-<a href="methods.html">Methods</a>
 <a href="extending.html">Contributing</a>
 </div>
 <div class="nav-right">
@@ -2126,40 +2125,80 @@ Within-analysis documentation
 <li><a href="#code-reviewers">Code reviewers</a></li>
 <li><a href="#living-data-analysis">Living data analysis</a></li>
 <li><a href="#github">GitHub</a></li>
-<li><a href="#reproducible-environment-with-renv">Reproducible environment with <code>renv::</code></a></li>
-<li><a href="#targets-and-tidyverse"><code>targets::</code> and <code>tidyverse::</code></a></li>
-<li><a href="#implementing-other-models">Implementing other models</a></li>
+<li><a href="#reproducible-environment-with-renv">Reproducible
+environment with <code>renv::</code></a></li>
+<li><a href="#targets-and-tidyverse"><code>targets::</code> and
+<code>tidyverse::</code></a></li>
+<li><a href="#implementing-other-models">Implementing other
+models</a></li>
 </ul>
 </nav>
 </div>
 <h1 id="code-reviewers">Code reviewers</h1>
-<p>This section is for those considering helping out with this project.</p>
-<p>The most important thing to check is that the code does what the manuscript says it does. Checking each target in the <a href="https://github.com/softloud/spunk/blob/main/_targets.R"><code>_targets.R</code></a> file filters to things expected and so forth.</p>
-<p>In this process, adding comments to the code of what your understanding of what it does is very useful. Adding to the documentation of the functions would also be very helpful. Another thing to consider is renaming the targets so that the pipeline conveys the analysis steps clearer.</p>
-<p>Code reviewers may have ideas about the site structure and documentation, as well.</p>
+<p>This section is for those considering helping out with this
+project.</p>
+<p>The most important thing to check is that the code does what the
+manuscript says it does. Checking each target in the <a
+href="https://github.com/softloud/spunk/blob/main/_targets.R"><code>_targets.R</code></a>
+file filters to things expected and so forth.</p>
+<p>In this process, adding comments to the code of what your
+understanding of what it does is very useful. Adding to the
+documentation of the functions would also be very helpful. Another thing
+to consider is renaming the targets so that the pipeline conveys the
+analysis steps clearer.</p>
+<p>Code reviewers may have ideas about the site structure and
+documentation, as well.</p>
 <p>Most importantly, two questions need to be assessed:</p>
 <ol type="1">
-<li>Do the visualisations answer the questions they are meant to answer?</li>
+<li>Do the visualisations answer the questions they are meant to
+answer?</li>
 <li>And, are the other analyses that need to be included?</li>
 </ol>
-<p>Finally, don’t forget to update the DESCRIPTION file with your ORCID as a contributor.</p>
+<p>Finally, don’t forget to update the DESCRIPTION file with your ORCID
+as a contributor.</p>
 <h1 id="living-data-analysis">Living data analysis</h1>
-<p>Code reviewers and other researchers may also wish to extend, that is, patch the script of this analysis. The rest of this document provides guidance on how to do that. A working version of R, and a willingess to learn a small set of functions, is all one needs to have in order to contribute to this analysis.</p>
-<p>Ideally future studies are appended to the dataset so that it remains an up to date repository of all studies examining interventions for male infertility. A good example of a large-scale living analysis is Cochrane’s <a href="https://covid-nma.com/">COVID-NMA</a>, applying evidence synthesis to all COVID research as it comes out.</p>
-<p>There may be a particular relevant skillset one has developed that would be a small effort but improve the analysis immensely.</p>
+<p>Code reviewers and other researchers may also wish to extend, that
+is, patch the script of this analysis. The rest of this document
+provides guidance on how to do that. A working version of R, and a
+willingess to learn a small set of functions, is all one needs to have
+in order to contribute to this analysis.</p>
+<p>Ideally future studies are appended to the dataset so that it remains
+an up to date repository of all studies examining interventions for male
+infertility. A good example of a large-scale living analysis is
+Cochrane’s <a href="https://covid-nma.com/">COVID-NMA</a>, applying
+evidence synthesis to all COVID research as it comes out.</p>
+<p>There may be a particular relevant skillset one has developed that
+would be a small effort but improve the analysis immensely.</p>
 <h1 id="github">GitHub</h1>
-<p>The <a href="https://usethis.r-lib.org/articles/pr-functions.html"><code>usethis::pr_</code></a> functions are a blessing for this kind of thing. For getting your computer to talk to git, an invaluable resource (every time; every new computer) is <a href="https://happygitwithr.com/resources.html">Happy Git with R</a>. Just a few functions to smooth the process of forking and contributing to a package. It does require an investment in reading the documentation for those few functions.</p>
-<p><a href="https://github.com/softloud/spunk/issues">Issues</a> are a great way of pooling knowledge. One person might have an idea for an extension, and another may know how to implement it quickly.</p>
-<h1 id="reproducible-environment-with-renv">Reproducible environment with <code>renv::</code></h1>
-<p>A frustration for analysts is often version conflicts between R packages. This analysis uses <code>renv::</code> to snapshot the versions used for the code. The following function retrieves the correct versions of the packages.</p>
+<p>The <a
+href="https://usethis.r-lib.org/articles/pr-functions.html"><code>usethis::pr_</code></a>
+functions are a blessing for this kind of thing. For getting your
+computer to talk to git, an invaluable resource (every time; every new
+computer) is <a href="https://happygitwithr.com/resources.html">Happy
+Git with R</a>. Just a few functions to smooth the process of forking
+and contributing to a package. It does require an investment in reading
+the documentation for those few functions.</p>
+<p><a href="https://github.com/softloud/spunk/issues">Issues</a> are a
+great way of pooling knowledge. One person might have an idea for an
+extension, and another may know how to implement it quickly.</p>
+<h1 id="reproducible-environment-with-renv">Reproducible environment
+with <code>renv::</code></h1>
+<p>A frustration for analysts is often version conflicts between R
+packages. This analysis uses <code>renv::</code> to snapshot the
+versions used for the code. The following function retrieves the correct
+versions of the packages.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>renv</span><span class='fu'>::</span><span class='fu'><a href='https://rstudio.github.io/renv/reference/restore.html'>restore</a></span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
-<h1 id="targets-and-tidyverse"><code>targets::</code> and <code>tidyverse::</code></h1>
-<p>This analysis is implemented in <a href="https://r4ds.had.co.nz/"><code>tidverse::</code></a> script, and the analysis is structured as both a package and as a <a href="https://books.ropensci.org/targets">make-like pipeline</a>.</p>
+<h1 id="targets-and-tidyverse"><code>targets::</code> and
+<code>tidyverse::</code></h1>
+<p>This analysis is implemented in <a
+href="https://r4ds.had.co.nz/"><code>tidverse::</code></a> script, and
+the analysis is structured as both a package and as a <a
+href="https://books.ropensci.org/targets">make-like pipeline</a>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/targets/'>targets</a></span><span class='op'>)</span> <span class='co'># for pipeline</span>
@@ -2167,7 +2206,8 @@ Within-analysis documentation
 </code></pre>
 </div>
 </div>
-<p>Note, in particular, that circles are code blocks, and squares represent loops.</p>
+<p>Note, in particular, that circles are code blocks, and squares
+represent loops.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_visnetwork.html'>tar_visnetwork</a></span><span class='op'>(</span>
@@ -2177,10 +2217,50 @@ Within-analysis documentation
   targets_only <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </code></pre>
 </div>
-<div id="htmlwidget-d9a553523a24affea4fe" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d9a553523a24affea4fe">{"x":{"nodes":{"name":["check_classes","diff_calc","fit_arms","fit_dat","get_int_class","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"type":["stem","stem","pattern","pattern","stem","stem","pattern","pattern","pattern","pattern","pattern","pattern","stem","stem","pattern","stem","stem","stem","stem","pattern","pattern","stem","stem","stem","stem","stem","pattern","pattern","pattern","stem","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","errored","outdated","outdated","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.01,0,99.512,0.121,0,0.041,0.561,0.047,0.046,0.181,0.192,0.226,0.059,0.05,0.147,0.912,0.01,0.007,0,1.282,0.786,0.026,0.073,0.007,0.048,0.007,0.007,4.669,2.885,0.05,0.173,0.226,5.669,0.089,0.213,0.182,5.706,0.234,0.06,0.066,0.001,0.17,0.069],"bytes":[589,156,85427283,26004,838,532,16994,4089,4020,15682,32953,34571,726,2589,2718,72,1207,1217,6267,4565,5619,6267,3136,4506,7772,5719,1875,548,289,246,46253,55497,559,30849,76932,4309,545,3080,2575,2815,389,6278,44],"branches":[null,null,4,4,null,null,23,23,23,23,23,23,null,null,4,null,null,null,null,4,4,null,null,null,null,null,4,4,4,null,4,4,4,4,4,4,4,4,4,4,null,null,null],"id":["check_classes","diff_calc","fit_arms","fit_dat","get_int_class","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"label":["check_classes","diff_calc","fit_arms","fit_dat","get_int_class","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"level":[8,1,10,9,4,6,7,10,9,8,9,8,3,13,12,14,10,11,5,11,11,4,6,6,7,8,11,12,11,3,12,13,15,14,12,13,14,10,12,12,1,2,6],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#C93312","#78B7C5","#78B7C5","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"shape":["dot","dot","square","square","dot","dot","square","square","square","square","square","square","dot","dot","square","dot","dot","dot","dot","square","square","dot","dot","dot","dot","dot","square","square","square","dot","square","square","square","square","square","square","square","square","square","square","dot","dot","dot"]},"edges":{"from":["fit_dat","model_dat","obs_long","fit_arms","hth_comp","nma_rel","obs_long","hth_dat","obs_control","obs_int","outcome_groups","tidy_dat","nma_rank","rank_rel_wide","hth_less_ma","sof_dat","fit_dat","ma_nma","ma_results_comp","ma_results_less","pico_dat","wide_obs","nma_rel","model_dat","sof_n","sof_rank","sof_rel","hth_less","diff_calc","nma_rank","model_dat","fit_arms","hth_comp","hth_extract_ma","diff_calc","nma_rel","obs_class_fix","hth_dat","int_class","wide_obs","rank_diff","rank_rel_dat","rel_diff","get_int_class","rank_diff","rel_diff","int_class","hth_comp","hth_extract_less","fit_arms","fit_arms","hth_comp","model_dat","wide_obs","hth_ma","model_dat","ma_dat"],"to":["sof_n","write_model","outcome_groups","nma_rank","ma_nma","ma_nma","check_classes","hth_ma","obs_long","obs_long","fit_dat","wide_obs","sof_rank","rank_rel_gt","hth_extract_less","sof_gt","fit_arms","ma_dat","ma_dat","ma_dat","pico_gt","int_class","sof_rel","obs_control","sof_dat","sof_dat","sof_dat","hth_less_ma","rank_diff","rank_diff","obs_int","plot_network","ma_results_comp","ma_results_comp","rel_diff","rel_diff","model_dat","hth_less","obs_class_fix","obs_class_fix","rank_rel_wide","rank_rel_wide","rank_rel_wide","rank_rel_dat","rank_rel_dat","rank_rel_dat","get_int_class","ma_results_less","ma_results_less","nma_rel","pico_dat","hth_dat","hth_dat","qa_class","hth_extract_ma","hth_comp","ma_plot"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Errored","Outdated","Stem","Pattern"],"color":["#354823","#C93312","#78B7C5","#899DA4","#899DA4"],"shape":["dot","dot","dot","dot","square"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre><code>── [1mAttaching packages[22m ─────────────────────────────────────── tidyverse 1.3.1 ──
+[32m✓[39m [34mggplot2[39m 3.3.5     [32m✓[39m [34mpurrr  [39m 0.3.4
+[32m✓[39m [34mtibble [39m 3.1.6     [32m✓[39m [34mdplyr  [39m 1.0.8
+[32m✓[39m [34mtidyr  [39m 1.2.0     [32m✓[39m [34mstringr[39m 1.4.0
+[32m✓[39m [34mreadr  [39m 2.1.2     [32m✓[39m [34mforcats[39m 0.5.1
+── [1mConflicts[22m ────────────────────────────────────────── tidyverse_conflicts() ──
+[31mx[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+[31mx[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+
+Attaching package: ‘janitor’
+
+The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test
+
+For execution on a local, multicore CPU with excess RAM we recommend calling
+options(mc.cores = parallel::detectCores())
+
+Attaching package: ‘multinma’
+
+The following objects are masked from ‘package:stats’:
+
+    dgamma, pgamma, qgamma
+
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Loading required package: metadat
+
+Loading the &#39;metafor&#39; package (version 3.4-0). For an
+introduction to the package please type: help(metafor)
+
+[conflicted] Will prefer [34mdplyr::filter[39m over any other package</code></pre>
+<div id="htmlwidget-3a8304f53b9573b0f24c" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3a8304f53b9573b0f24c">{"x":{"nodes":{"name":["check_classes","count_unlisted","diff_calc","fit_arms","fit_class_qa","fit_dat","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","nma_sucra","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_class","rank_rel_class_key","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"type":["stem","stem","stem","pattern","pattern","pattern","stem","pattern","pattern","pattern","pattern","pattern","pattern","stem","stem","pattern","stem","stem","stem","stem","pattern","pattern","pattern","stem","stem","stem","stem","stem","pattern","pattern","pattern","stem","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.024,0.028,0.001,148.417,0.164,0.651,0.047,0.902,0.083,0.057,0.269,0.351,0.453,0.069,0.05,0.217,0.917,0.02,0.014,0.001,1.149,0.844,7.662,0.053,0.146,0.008,0.099,0.014,0.01,4.96,3.602,0.08,0.332,0.082,0.058,0.332,16.815,0.176,0.465,0.289,6.054,0.507,0.104,0.172,0,0.211,0.1],"bytes":[598,4675,154,123978380,472,27899,508,15974,3518,3451,14594,37672,40163,725,1694,1148,71,1104,1115,7029,4769,5881,293,7029,3230,5313,9199,7066,1957,548,285,244,50359,61191,610,60760,559,33507,84031,4499,545,3199,2705,2968,388,7025,43],"branches":[null,null,null,4,4,4,null,20,20,20,20,20,20,null,null,4,null,null,null,null,4,4,4,null,null,null,null,null,4,4,4,null,4,4,4,4,4,4,4,4,4,4,4,4,null,null,null],"label":["check_classes","count_unlisted","diff_calc","fit_arms","fit_class_qa","fit_dat","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","nma_sucra","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_class","rank_rel_class_key","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["check_classes","count_unlisted","diff_calc","fit_arms","fit_class_qa","fit_dat","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","nma_sucra","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_class","rank_rel_class_key","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"level":[8,1,1,10,10,9,6,7,10,9,8,9,8,3,13,12,14,10,11,5,11,11,11,4,6,6,7,8,11,12,11,3,12,14,15,13,16,15,12,13,14,10,12,12,1,2,6],"shape":["dot","dot","dot","square","square","square","dot","square","square","square","square","square","square","dot","dot","square","dot","dot","dot","dot","square","square","square","dot","dot","dot","dot","dot","square","square","square","dot","square","square","square","square","square","square","square","square","square","square","square","square","dot","dot","dot"]},"edges":{"from":["fit_arms","hth_dat","model_dat","model_dat","ma_nma","ma_results_comp","ma_results_less","obs_control","obs_int","rank_rel_wide","hth_less_ma","diff_calc","nma_rank","rank_rel_class","hth_ma","model_dat","int_class","wide_obs","hth_comp","model_dat","wide_obs","hth_less","fit_arms","fit_dat","diff_calc","nma_rel","hth_comp","hth_extract_less","fit_arms","hth_dat","obs_class_fix","rank_diff","rank_rel_class","rel_diff","wide_obs","model_dat","fit_dat","nma_rank","obs_long","outcome_groups","hth_comp","nma_rel","sof_dat","rank_diff","rel_diff","fit_arms","count_unlisted","tidy_dat","nma_rel","int_class","rank_rel_dat","hth_comp","hth_extract_ma","sof_n","sof_rank","sof_rel","fit_dat","obs_long","fit_arms","ma_dat","pico_dat"],"to":["nma_rank","hth_ma","write_model","hth_comp","ma_dat","ma_dat","ma_dat","obs_long","obs_long","rank_rel_gt","hth_extract_less","rank_diff","rank_diff","rank_rel_class_key","hth_extract_ma","obs_control","obs_class_fix","obs_class_fix","hth_dat","hth_dat","qa_class","hth_less_ma","nma_sucra","fit_arms","rel_diff","rel_diff","ma_results_less","ma_results_less","plot_network","hth_less","model_dat","rank_rel_wide","rank_rel_wide","rank_rel_wide","int_class","obs_int","sof_n","sof_rank","check_classes","fit_dat","ma_nma","ma_nma","sof_gt","rank_rel_dat","rank_rel_dat","nma_rel","wide_obs","wide_obs","sof_rel","rank_rel_class","rank_rel_class","ma_results_comp","ma_results_comp","sof_dat","sof_dat","sof_dat","fit_class_qa","outcome_groups","pico_dat","ma_plot","pico_gt"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","dot","square"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>Subsections of the pipeline can be viewed by name or by <code>tidyverse::</code> selection tools. For example, the pipeline of head to head comparisons can be viewed thus.</p>
+<p>Subsections of the pipeline can be viewed by name or by
+<code>tidyverse::</code> selection tools. For example, the pipeline of
+head to head comparisons can be viewed thus.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_visnetwork.html'>tar_visnetwork</a></span><span class='op'>(</span>
@@ -2189,11 +2269,51 @@ Within-analysis documentation
   allow <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"hth"</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
-<div id="htmlwidget-2ee9b0c5c62450c9af33" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2ee9b0c5c62450c9af33">{"x":{"nodes":{"name":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"type":["stem","pattern","pattern","pattern","pattern","pattern","pattern"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.041,0.561,0.047,0.046,0.181,0.192,0.226],"bytes":[532,16994,4089,4020,15682,32953,34571],"branches":[null,23,23,23,23,23,23],"id":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"label":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"level":[1,2,5,4,3,4,3],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"shape":["dot","square","square","square","square","square","square"]},"edges":{"from":["hth_dat","hth_less_ma","hth_less","hth_dat","hth_comp","hth_ma"],"to":["hth_ma","hth_extract_less","hth_less_ma","hth_less","hth_dat","hth_extract_ma"],"arrows":["to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","dot","square"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre><code>── [1mAttaching packages[22m ─────────────────────────────────────── tidyverse 1.3.1 ──
+[32m✓[39m [34mggplot2[39m 3.3.5     [32m✓[39m [34mpurrr  [39m 0.3.4
+[32m✓[39m [34mtibble [39m 3.1.6     [32m✓[39m [34mdplyr  [39m 1.0.8
+[32m✓[39m [34mtidyr  [39m 1.2.0     [32m✓[39m [34mstringr[39m 1.4.0
+[32m✓[39m [34mreadr  [39m 2.1.2     [32m✓[39m [34mforcats[39m 0.5.1
+── [1mConflicts[22m ────────────────────────────────────────── tidyverse_conflicts() ──
+[31mx[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+[31mx[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+
+Attaching package: ‘janitor’
+
+The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test
+
+For execution on a local, multicore CPU with excess RAM we recommend calling
+options(mc.cores = parallel::detectCores())
+
+Attaching package: ‘multinma’
+
+The following objects are masked from ‘package:stats’:
+
+    dgamma, pgamma, qgamma
+
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Loading required package: metadat
+
+Loading the &#39;metafor&#39; package (version 3.4-0). For an
+introduction to the package please type: help(metafor)
+
+[conflicted] Will prefer [34mdplyr::filter[39m over any other package</code></pre>
+<div id="htmlwidget-7d91181e86e8a51f74e8" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7d91181e86e8a51f74e8">{"x":{"nodes":{"name":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"type":["stem","pattern","pattern","pattern","pattern","pattern","pattern"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.047,0.902,0.083,0.057,0.269,0.351,0.453],"bytes":[508,15974,3518,3451,14594,37672,40163],"branches":[null,20,20,20,20,20,20],"label":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"level":[1,2,5,4,3,4,3],"shape":["dot","square","square","square","square","square","square"]},"edges":{"from":["hth_dat","hth_less_ma","hth_ma","hth_comp","hth_less","hth_dat"],"to":["hth_ma","hth_extract_less","hth_extract_ma","hth_dat","hth_less_ma","hth_less"],"arrows":["to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","dot","square"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
 </div>
 <h1 id="implementing-other-models">Implementing other models</h1>
-<p>Here is the pipeline for fitting the network meta-analysis models. Functions are documented using <code>roxygen::2</code> and can be searched using R, for example <code>?smd_calc</code>.</p>
+<p>Here is the pipeline for fitting the network meta-analysis models.
+Functions are documented using <code>roxygen::2</code> and can be
+searched using R, for example <code>?smd_calc</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># fit dat and fit arms are the most relevant targets for the model implementation</span>
@@ -2203,11 +2323,52 @@ Within-analysis documentation
   names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fit_dat"</span>, <span class='st'>"fit_arms"</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
-<div id="htmlwidget-38975f4466b96a1abdf8" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-38975f4466b96a1abdf8">{"x":{"nodes":{"name":["fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"type":["pattern","pattern","stem","stem","stem","stem","stem","stem","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[99.512,0.121,0.059,0,0.026,0.073,0.007,0.048,0.007,0.001,0.17],"bytes":[85427283,26004,726,6267,6267,3136,4506,7772,5719,389,6278],"branches":[4,4,null,null,null,null,null,null,null,null,null],"id":["fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"label":["fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"level":[10,9,3,5,4,6,6,7,8,1,2],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"shape":["square","square","dot","dot","dot","dot","dot","dot","dot","dot","dot"]},"edges":{"from":["model_dat","obs_class_fix","int_class","wide_obs","wide_obs","obs_control","obs_int","model_dat","outcome_groups","obs_long","tidy_dat","fit_dat"],"to":["obs_control","model_dat","obs_class_fix","obs_class_fix","int_class","obs_long","obs_long","obs_int","fit_dat","outcome_groups","wide_obs","fit_arms"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Pattern","Stem"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","square","dot"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre><code>── [1mAttaching packages[22m ─────────────────────────────────────── tidyverse 1.3.1 ──
+[32m✓[39m [34mggplot2[39m 3.3.5     [32m✓[39m [34mpurrr  [39m 0.3.4
+[32m✓[39m [34mtibble [39m 3.1.6     [32m✓[39m [34mdplyr  [39m 1.0.8
+[32m✓[39m [34mtidyr  [39m 1.2.0     [32m✓[39m [34mstringr[39m 1.4.0
+[32m✓[39m [34mreadr  [39m 2.1.2     [32m✓[39m [34mforcats[39m 0.5.1
+── [1mConflicts[22m ────────────────────────────────────────── tidyverse_conflicts() ──
+[31mx[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+[31mx[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+
+Attaching package: ‘janitor’
+
+The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test
+
+For execution on a local, multicore CPU with excess RAM we recommend calling
+options(mc.cores = parallel::detectCores())
+
+Attaching package: ‘multinma’
+
+The following objects are masked from ‘package:stats’:
+
+    dgamma, pgamma, qgamma
+
+Loading required package: Matrix
+
+Attaching package: ‘Matrix’
+
+The following objects are masked from ‘package:tidyr’:
+
+    expand, pack, unpack
+
+Loading required package: metadat
+
+Loading the &#39;metafor&#39; package (version 3.4-0). For an
+introduction to the package please type: help(metafor)
+
+[conflicted] Will prefer [34mdplyr::filter[39m over any other package</code></pre>
+<div id="htmlwidget-7064db8b12f54460acbc" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7064db8b12f54460acbc">{"x":{"nodes":{"name":["count_unlisted","fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"type":["stem","pattern","pattern","stem","stem","stem","stem","stem","stem","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.028,148.417,0.651,0.069,0.001,0.053,0.146,0.008,0.099,0.014,0,0.211],"bytes":[4675,123978380,27899,725,7029,7029,3230,5313,9199,7066,388,7025],"branches":[null,4,4,null,null,null,null,null,null,null,null,null],"label":["count_unlisted","fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["count_unlisted","fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"level":[1,10,9,3,5,4,6,6,7,8,1,2],"shape":["dot","square","square","dot","dot","dot","dot","dot","dot","dot","dot","dot"]},"edges":{"from":["count_unlisted","tidy_dat","outcome_groups","fit_dat","obs_control","obs_int","int_class","wide_obs","wide_obs","model_dat","obs_long","obs_class_fix","model_dat"],"to":["wide_obs","wide_obs","fit_dat","fit_arms","obs_long","obs_long","obs_class_fix","obs_class_fix","int_class","obs_control","outcome_groups","model_dat","obs_int"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","dot","square"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>New targets can be appended to the pipeline that calculate the data to be fitted differently, or add a different model algorithm. These can either replace or add to the existing pipeline.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>New targets can be appended to the pipeline that calculate the data
+to be fitted differently, or add a different model algorithm. These can
+either replace or add to the existing pipeline.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
