@@ -1,5 +1,5 @@
 ---
-title: "Access sperm:: analysis"
+title: "Access spunk:: analysis"
 date: "`r Sys.Date()`"
 output: distill::distill_article
 ---
@@ -7,42 +7,42 @@ output: distill::distill_article
 ```{r}
 library(targets)
 library(tidyverse)
-library(sperm)
+library(spunk)
 
 ```
 
 
 ## Installation
 
-The `sperm::` analysis is available at [GitHub](https://github.com/softloud/sperm) with:
+The `spunk::` analysis is available at [GitHub](https://github.com/softloud/spunk) with:
 
 
 Either download the codebase (green `Code` button) as a .zip file or use GitHub command-line interface (`gh cli`)
 
 ``` bash
-gh repo clone softloud/sperm
+gh repo clone softloud/spunk
 ```
 
-The raw data are preloaded in the packaged analysis which can be accessed by installing the `sperm::` package:
+The raw data are preloaded in the packaged analysis which can be accessed by installing the `spunk::` package:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("softloud/sperm")
+devtools::install_github("softloud/spunk")
 ```
 
-`sperm::` is created using `targets::` so that each step in the analysis can be accessed.
+`spunk::` is created using `targets::` so that each step in the analysis can be accessed.
 
 ```r
 install.packages("targets")
 ```
 
-`sperm::`'s analysis pipeline can be viewed:
+`spunk::`'s analysis pipeline can be viewed:
 
 ```{r message=FALSE}
 tar_glimpse()
 ```
 
-`sperm::` uses the `renv::` package to snapshot the versions of packages used to ensure reproducibility, run this command to load the required packages after opening the R project.
+`spunk::` uses the `renv::` package to snapshot the versions of packages used to ensure reproducibility, run this command to load the required packages after opening the R project.
 
 ```r
 renv::restore()
@@ -61,7 +61,7 @@ here::here("data", "count_obs.rda") %>%
 
 ```
 
-There are four raw datasets preloaded in `sperm::` package: `count_obs`, `morphology_obs`, `motility_obs`, and `volumne_obs` scraped from the googlesheet. 
+There are four raw datasets preloaded in `spunk::` package: `count_obs`, `morphology_obs`, `motility_obs`, and `volumne_obs` scraped from the googlesheet. 
 
 ```{r}
 count_obs

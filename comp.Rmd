@@ -14,32 +14,4 @@ library(readr)
 
 ```
 
-# Count
-
-```{r layout = "l-screen"}
-read_rds("img/count-matrix.rds")
-```
-
-# Volume
-
-
-```{r layout = "l-screen"}
-read_rds("img/volume-matrix.rds")
-```
-
-
-# Morphology
-
-
-```{r layout = "l-screen"}
-read_rds("img/morphology-matrix.rds")
-```
-
-
-# Motility
-
-
-```{r layout = "l-screen"}
-read_rds("img/motility-matrix.rds")
-```
-
+See the files marked as **outcome-matrix.png** in this folder [on GitHub](https://github.com/softloud/spunk/tree/main/img. 
