@@ -17,8 +17,6 @@ navbar:
           href: comp.html
         - text: "Sensitivity"
           href: sensitivity.html
-    - text: "Methods"
-      href: methods.html
     - text: "Contributing"
       href: extending.html
   right:
