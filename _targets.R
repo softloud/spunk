@@ -718,7 +718,18 @@ list(
       tab_style(style = cell_text(align = "left"),
                 locations = cells_body(columns = n)) %>%
       tab_style(style = cell_text(align = "right"),
-                locations = cells_column_labels(columns = intervention))
+                locations = cells_column_labels(columns = intervention)) %>%
+      tab_footnote(
+        "95% credible interval produced by multinma::nma.",
+        locations = cells_column_labels(
+          columns = c(rel, rank))
+      ) %>%
+      tab_footnote(
+        "Rank estimates are based on relative effects. In this case, a higher relative effect is considered a better outcome, so higher relative effects produce higher rankings. Relative effects provide an estimate of the treatment effect for that intervention, rank estimates provide an estimate of the comparisons between treatments.",
+        locations = cells_column_labels(
+          columns = c(rank, rel)
+        )
+      )
 
     sprintf("Writing image to \n %s", png_path) %>%
       message()

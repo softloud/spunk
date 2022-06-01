@@ -19,12 +19,4 @@ navbar:
           href: sensitivity.html
     - text: "Contributing"
       href: extending.html
-  right:
-    - text: "Within-analysis documentation"
-      href: archived.html
-      menu:
-        - text: "Access analysis"
-          href: access-analysis.html
-        - text: "Data integrity"
-          href: integrity.html
 output: distill::distill_article
