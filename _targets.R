@@ -665,7 +665,7 @@ list(
     nma_rank %>%
       mutate(across(c(
         mean_rank, lb_rank, ub_rank
-      ), round, 2)) %>%
+      ), round)) %>%
       mutate(rank = glue("{mean_rank} ({lb_rank}, {ub_rank})")) %>%
       select(outcome, intervention = intervention_rank, rank),
     pattern = map(nma_rank),
