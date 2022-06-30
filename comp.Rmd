@@ -14,4 +14,4 @@ library(readr)
 
 ```
 
-See the files marked as *outcome***-matrix** in this folder [on GitHub](https://github.com/softloud/spunk/tree/main/img. 
+See the files marked as *outcome***-matrix** in this folder [on GitHub](https://github.com/softloud/spunk/tree/main/img). 
