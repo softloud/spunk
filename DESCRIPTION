@@ -18,7 +18,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Depends: 
-    R (>= 2.10)
+    R (>= 2.10), ggh4x 
 LazyData: true
 Date: 2022
 Year: 2022
