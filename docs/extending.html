@@ -50,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -73,9 +74,9 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
 code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
@@ -93,8 +94,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2022-06-01"/>
-  <meta property="article:created" itemprop="dateCreated" content="2022-06-01"/>
+  <meta property="article:published" itemprop="datePublished" content="2022-06-30"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-06-30"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="spunk::: Living analysis"/>
@@ -112,7 +113,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Living analysis"]},{"type":"character","attributes":{},"value":["Computationally extending the analysis. \n"]},{"type":"character","attributes":{},"value":["2022-06-01"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Living analysis"]},{"type":"character","attributes":{},"value":["Computationally extending the analysis. \n"]},{"type":"character","attributes":{},"value":["2022-06-30"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1033,10 +1034,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     margin-top: 1.5em;
   }
 
-  .figure img {
-    width: 100%;
-  }
-
   .figure .caption {
     color: rgba(0, 0, 0, 0.6);
     font-size: 12px;
@@ -1866,6 +1863,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
+        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
+          var fn = $(this).children()[0]
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
           return "<p>" + $('#ref-' + ref).html() + "</p>";
@@ -1880,6 +1883,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
 
       // clear polling timer
       clearInterval(tid);
@@ -1979,6 +2007,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -2001,7 +2031,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
       });
     }
 
@@ -2040,7 +2070,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
   <script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
   <link href="site_libs/vis-9.1.0/vis-network.min.css" rel="stylesheet" />
   <script src="site_libs/vis-9.1.0/vis-network.min.js"></script>
@@ -2064,7 +2094,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Living analysis","description":"Computationally extending the analysis.","authors":[],"publishedDate":"2022-06-01T00:00:00.000+02:00"}
+{"title":"Living analysis","description":"Computationally extending the analysis.","authors":[],"publishedDate":"2022-06-30T00:00:00.000+02:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2111,15 +2141,19 @@ Living analyses
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#code-reviewers">Code reviewers</a></li>
-<li><a href="#living-data-analysis">Living data analysis</a></li>
-<li><a href="#github">GitHub</a></li>
-<li><a href="#reproducible-environment-with-renv">Reproducible
-environment with <code>renv::</code></a></li>
-<li><a href="#targets-and-tidyverse"><code>targets::</code> and
+<li><a href="#code-reviewers" id="toc-code-reviewers">Code
+reviewers</a></li>
+<li><a href="#living-data-analysis" id="toc-living-data-analysis">Living
+data analysis</a></li>
+<li><a href="#github" id="toc-github">GitHub</a></li>
+<li><a href="#reproducible-environment-with-renv"
+id="toc-reproducible-environment-with-renv">Reproducible environment
+with <code>renv::</code></a></li>
+<li><a href="#targets-and-tidyverse"
+id="toc-targets-and-tidyverse"><code>targets::</code> and
 <code>tidyverse::</code></a></li>
-<li><a href="#implementing-other-models">Implementing other
-models</a></li>
+<li><a href="#implementing-other-models"
+id="toc-implementing-other-models">Implementing other models</a></li>
 </ul>
 </nav>
 </div>
@@ -2178,8 +2212,7 @@ versions used for the code. The following function retrieves the correct
 versions of the packages.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>renv</span><span class='fu'>::</span><span class='fu'><a href='https://rstudio.github.io/renv/reference/restore.html'>restore</a></span><span class='op'>(</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>renv</span><span class='fu'>::</span><span class='fu'><a href='https://rstudio.github.io/renv/reference/restore.html'>restore</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <h1 id="targets-and-tidyverse"><code>targets::</code> and
@@ -2190,30 +2223,29 @@ the analysis is structured as both a package and as a <a
 href="https://books.ropensci.org/targets">make-like pipeline</a>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/targets/'>targets</a></span><span class='op'>)</span> <span class='co'># for pipeline</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span> <span class='co'># data science functions</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/targets/'>targets</a></span><span class='op'>)</span> <span class='co'># for pipeline</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span> <span class='co'># data science functions</span></span></code></pre>
 </div>
 </div>
 <p>Note, in particular, that circles are code blocks, and squares
 represent loops.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_visnetwork.html'>tar_visnetwork</a></span><span class='op'>(</span>
-  <span class='co'># this first argument is only required for static output</span>
-  <span class='co'># https://github.com/ropensci/targets/discussions/819</span>
-  callr_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>spinner <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, 
-  targets_only <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_visnetwork.html'>tar_visnetwork</a></span><span class='op'>(</span></span>
+<span>  <span class='co'># this first argument is only required for static output</span></span>
+<span>  <span class='co'># https://github.com/ropensci/targets/discussions/819</span></span>
+<span>  callr_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>spinner <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, </span>
+<span>  targets_only <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>── [1mAttaching packages[22m ─────────────────────────────────────── tidyverse 1.3.1 ──
-[32m✓[39m [34mggplot2[39m 3.3.5     [32m✓[39m [34mpurrr  [39m 0.3.4
-[32m✓[39m [34mtibble [39m 3.1.6     [32m✓[39m [34mdplyr  [39m 1.0.8
-[32m✓[39m [34mtidyr  [39m 1.2.0     [32m✓[39m [34mstringr[39m 1.4.0
-[32m✓[39m [34mreadr  [39m 2.1.2     [32m✓[39m [34mforcats[39m 0.5.1
+[32m✔[39m [34mggplot2[39m 3.3.6     [32m✔[39m [34mpurrr  [39m 0.3.4
+[32m✔[39m [34mtibble [39m 3.1.7     [32m✔[39m [34mdplyr  [39m 1.0.9
+[32m✔[39m [34mtidyr  [39m 1.2.0     [32m✔[39m [34mstringr[39m 1.4.0
+[32m✔[39m [34mreadr  [39m 2.1.2     [32m✔[39m [34mforcats[39m 0.5.1
 ── [1mConflicts[22m ────────────────────────────────────────── tidyverse_conflicts() ──
-[31mx[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-[31mx[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+Loading required package: ggh4x
 
 Attaching package: ‘janitor’
 
@@ -2244,28 +2276,28 @@ Loading the &#39;metafor&#39; package (version 3.4-0). For an
 introduction to the package please type: help(metafor)
 
 [conflicted] Will prefer [34mdplyr::filter[39m over any other package</code></pre>
-<div id="htmlwidget-87f4353d99316bae6813" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-87f4353d99316bae6813">{"x":{"nodes":{"name":["check_classes","count_unlisted","diff_calc","fit_arms","fit_class_qa","fit_dat","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","nma_sucra","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_class","rank_rel_class_key","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"type":["stem","stem","stem","pattern","pattern","pattern","stem","pattern","pattern","pattern","pattern","pattern","pattern","stem","stem","pattern","stem","stem","stem","stem","pattern","pattern","pattern","stem","stem","stem","stem","stem","pattern","pattern","pattern","stem","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.024,0.028,0.001,148.417,0.164,0.651,0.047,0.902,0.083,0.057,0.269,0.351,0.453,0.069,0.05,0.217,0.917,0.02,0.014,0.001,1.149,0.844,7.662,0.053,0.146,0.008,0.099,0.014,0.01,4.96,3.602,0.08,0.332,0.082,0.058,0.332,16.815,0.176,0.465,0.371,6.054,0.507,0.167,0.172,0,0.211,0.1],"bytes":[598,4675,154,123978380,472,27899,508,15974,3518,3451,14594,37672,40163,725,1694,1148,71,1104,1115,7029,4769,5881,293,7029,3230,5313,9199,7066,1957,548,285,244,50359,61191,610,60760,559,33507,84031,4269,545,3199,2465,2968,388,7025,43],"branches":[null,null,null,4,4,4,null,20,20,20,20,20,20,null,null,4,null,null,null,null,4,4,4,null,null,null,null,null,4,4,4,null,4,4,4,4,4,4,4,4,4,4,4,4,null,null,null],"label":["check_classes","count_unlisted","diff_calc","fit_arms","fit_class_qa","fit_dat","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","nma_sucra","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_class","rank_rel_class_key","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["check_classes","count_unlisted","diff_calc","fit_arms","fit_class_qa","fit_dat","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","nma_sucra","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_class","rank_rel_class_key","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"level":[8,1,1,10,10,9,6,7,10,9,8,9,8,3,13,12,14,10,11,5,11,11,11,4,6,6,7,8,11,12,11,3,12,14,15,13,16,15,12,13,14,10,12,12,1,2,6],"shape":["dot","dot","dot","square","square","square","dot","square","square","square","square","square","square","dot","dot","square","dot","dot","dot","dot","square","square","square","dot","dot","dot","dot","dot","square","square","square","dot","square","square","square","square","square","square","square","square","square","square","square","square","dot","dot","dot"]},"edges":{"from":["fit_arms","hth_dat","model_dat","model_dat","ma_nma","ma_results_comp","ma_results_less","obs_control","obs_int","rank_rel_wide","hth_less_ma","diff_calc","nma_rank","rank_rel_class","hth_ma","model_dat","int_class","wide_obs","hth_comp","model_dat","wide_obs","hth_less","fit_arms","fit_dat","diff_calc","nma_rel","hth_comp","hth_extract_less","fit_arms","hth_dat","obs_class_fix","rank_diff","rank_rel_class","rel_diff","wide_obs","model_dat","fit_dat","nma_rank","obs_long","outcome_groups","hth_comp","nma_rel","sof_dat","rank_diff","rel_diff","fit_arms","count_unlisted","tidy_dat","nma_rel","int_class","rank_rel_dat","hth_comp","hth_extract_ma","sof_n","sof_rank","sof_rel","fit_dat","obs_long","fit_arms","ma_dat","pico_dat"],"to":["nma_rank","hth_ma","write_model","hth_comp","ma_dat","ma_dat","ma_dat","obs_long","obs_long","rank_rel_gt","hth_extract_less","rank_diff","rank_diff","rank_rel_class_key","hth_extract_ma","obs_control","obs_class_fix","obs_class_fix","hth_dat","hth_dat","qa_class","hth_less_ma","nma_sucra","fit_arms","rel_diff","rel_diff","ma_results_less","ma_results_less","plot_network","hth_less","model_dat","rank_rel_wide","rank_rel_wide","rank_rel_wide","int_class","obs_int","sof_n","sof_rank","check_classes","fit_dat","ma_nma","ma_nma","sof_gt","rank_rel_dat","rank_rel_dat","nma_rel","wide_obs","wide_obs","sof_rel","rank_rel_class","rank_rel_class","ma_results_comp","ma_results_comp","sof_dat","sof_dat","sof_dat","fit_class_qa","outcome_groups","pico_dat","ma_plot","pico_gt"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","dot","square"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-4783767edcb89ac1e0e8" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4783767edcb89ac1e0e8">{"x":{"nodes":{"name":["check_classes","count_unlisted","diff_calc","fit_arms","fit_class_qa","fit_dat","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","nma_sucra","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_class","rank_rel_class_key","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"type":["stem","stem","stem","pattern","pattern","pattern","stem","pattern","pattern","pattern","pattern","pattern","pattern","stem","stem","pattern","stem","stem","stem","stem","pattern","pattern","pattern","stem","stem","stem","stem","stem","pattern","pattern","pattern","stem","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","pattern","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","outdated","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.007,0.026,0,176.615,0.691,0.195,0.031,0.273,0.027,0.022,0.096,0.124,0.153,0.016,0.037,0.073,0.558,0.006,0.006,0,1.615,1.283,9.379,0.016,0.046,0.004,0.025,0.01,0.005,11.672,2.75,0.048,0.094,0.034,0.019,0.151,12.594,0.049,0.106,0.114,9.42,0.099,0.029,0.036,0,0.095,0.057],"bytes":[600,4312,156,123962911,948,26474,508,14905,3543,3479,13734,37339,39824,726,1695,1152,72,1106,1117,6056,4749,5903,297,6056,3227,4321,7986,5886,1960,526,289,245,50243,61527,615,61100,536,33569,84162,4268,526,3205,2469,2958,389,6054,44],"branches":[null,null,null,4,4,4,null,20,20,20,20,20,20,null,null,4,null,null,null,null,4,4,4,null,null,null,null,null,4,4,4,null,4,4,4,4,4,4,4,4,4,4,4,4,null,null,null],"label":["check_classes","count_unlisted","diff_calc","fit_arms","fit_class_qa","fit_dat","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","nma_sucra","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_class","rank_rel_class_key","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#78B7C5","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["check_classes","count_unlisted","diff_calc","fit_arms","fit_class_qa","fit_dat","hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma","int_class","ma_dat","ma_nma","ma_plot","ma_results_comp","ma_results_less","model_dat","nma_rank","nma_rel","nma_sucra","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","pico_dat","pico_gt","plot_network","qa_class","rank_diff","rank_rel_class","rank_rel_class_key","rank_rel_dat","rank_rel_gt","rank_rel_wide","rel_diff","sof_dat","sof_gt","sof_n","sof_rank","sof_rel","tidy_dat","wide_obs","write_model"],"level":[8,1,1,10,10,9,6,7,10,9,8,9,8,3,13,12,14,10,11,5,11,11,11,4,6,6,7,8,11,12,11,3,12,14,15,13,16,15,12,13,14,10,12,12,1,2,6],"shape":["dot","dot","dot","square","square","square","dot","square","square","square","square","square","square","dot","dot","square","dot","dot","dot","dot","square","square","square","dot","dot","dot","dot","dot","square","square","square","dot","square","square","square","square","square","square","square","square","square","square","square","square","dot","dot","dot"]},"edges":{"from":["fit_arms","hth_dat","model_dat","model_dat","ma_nma","ma_results_comp","ma_results_less","obs_control","obs_int","rank_rel_wide","hth_less_ma","diff_calc","nma_rank","rank_rel_class","hth_ma","model_dat","int_class","wide_obs","hth_comp","model_dat","wide_obs","hth_less","fit_arms","fit_dat","diff_calc","nma_rel","hth_comp","hth_extract_less","fit_arms","hth_dat","obs_class_fix","rank_diff","rank_rel_class","rel_diff","wide_obs","model_dat","fit_dat","nma_rank","obs_long","outcome_groups","hth_comp","nma_rel","sof_dat","rank_diff","rel_diff","fit_arms","count_unlisted","tidy_dat","nma_rel","int_class","rank_rel_dat","hth_comp","hth_extract_ma","sof_n","sof_rank","sof_rel","fit_dat","obs_long","fit_arms","ma_dat","pico_dat"],"to":["nma_rank","hth_ma","write_model","hth_comp","ma_dat","ma_dat","ma_dat","obs_long","obs_long","rank_rel_gt","hth_extract_less","rank_diff","rank_diff","rank_rel_class_key","hth_extract_ma","obs_control","obs_class_fix","obs_class_fix","hth_dat","hth_dat","qa_class","hth_less_ma","nma_sucra","fit_arms","rel_diff","rel_diff","ma_results_less","ma_results_less","plot_network","hth_less","model_dat","rank_rel_wide","rank_rel_wide","rank_rel_wide","int_class","obs_int","sof_n","sof_rank","check_classes","fit_dat","ma_nma","ma_nma","sof_gt","rank_rel_dat","rank_rel_dat","nma_rel","wide_obs","wide_obs","sof_rel","rank_rel_class","rank_rel_class","ma_results_comp","ma_results_comp","sof_dat","sof_dat","sof_dat","fit_class_qa","outcome_groups","pico_dat","ma_plot","pico_gt"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Outdated","Stem","Pattern"],"color":["#354823","#78B7C5","#899DA4","#899DA4"],"shape":["dot","dot","dot","square"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>Subsections of the pipeline can be viewed by name or by
 <code>tidyverse::</code> selection tools. For example, the pipeline of
 head to head comparisons can be viewed thus.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_visnetwork.html'>tar_visnetwork</a></span><span class='op'>(</span>
-  <span class='co'># this first argument is only required for static output</span>
-  callr_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>spinner <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, 
-  allow <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"hth"</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_visnetwork.html'>tar_visnetwork</a></span><span class='op'>(</span></span>
+<span>  <span class='co'># this first argument is only required for static output</span></span>
+<span>  callr_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>spinner <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, </span>
+<span>  allow <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"hth"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>── [1mAttaching packages[22m ─────────────────────────────────────── tidyverse 1.3.1 ──
-[32m✓[39m [34mggplot2[39m 3.3.5     [32m✓[39m [34mpurrr  [39m 0.3.4
-[32m✓[39m [34mtibble [39m 3.1.6     [32m✓[39m [34mdplyr  [39m 1.0.8
-[32m✓[39m [34mtidyr  [39m 1.2.0     [32m✓[39m [34mstringr[39m 1.4.0
-[32m✓[39m [34mreadr  [39m 2.1.2     [32m✓[39m [34mforcats[39m 0.5.1
+[32m✔[39m [34mggplot2[39m 3.3.6     [32m✔[39m [34mpurrr  [39m 0.3.4
+[32m✔[39m [34mtibble [39m 3.1.7     [32m✔[39m [34mdplyr  [39m 1.0.9
+[32m✔[39m [34mtidyr  [39m 1.2.0     [32m✔[39m [34mstringr[39m 1.4.0
+[32m✔[39m [34mreadr  [39m 2.1.2     [32m✔[39m [34mforcats[39m 0.5.1
 ── [1mConflicts[22m ────────────────────────────────────────── tidyverse_conflicts() ──
-[31mx[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-[31mx[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+Loading required package: ggh4x
 
 Attaching package: ‘janitor’
 
@@ -2296,8 +2328,8 @@ Loading the &#39;metafor&#39; package (version 3.4-0). For an
 introduction to the package please type: help(metafor)
 
 [conflicted] Will prefer [34mdplyr::filter[39m over any other package</code></pre>
-<div id="htmlwidget-70a2c73092c57a762160" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-70a2c73092c57a762160">{"x":{"nodes":{"name":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"type":["stem","pattern","pattern","pattern","pattern","pattern","pattern"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.047,0.902,0.083,0.057,0.269,0.351,0.453],"bytes":[508,15974,3518,3451,14594,37672,40163],"branches":[null,20,20,20,20,20,20],"label":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"level":[1,2,5,4,3,4,3],"shape":["dot","square","square","square","square","square","square"]},"edges":{"from":["hth_dat","hth_less_ma","hth_ma","hth_comp","hth_less","hth_dat"],"to":["hth_ma","hth_extract_less","hth_extract_ma","hth_dat","hth_less_ma","hth_less"],"arrows":["to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","dot","square"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-a7e046ace9ac255e2ab6" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a7e046ace9ac255e2ab6">{"x":{"nodes":{"name":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"type":["stem","pattern","pattern","pattern","pattern","pattern","pattern"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.031,0.273,0.027,0.022,0.096,0.124,0.153],"bytes":[508,14905,3543,3479,13734,37339,39824],"branches":[null,20,20,20,20,20,20],"label":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["hth_comp","hth_dat","hth_extract_less","hth_extract_ma","hth_less","hth_less_ma","hth_ma"],"level":[1,2,5,4,3,4,3],"shape":["dot","square","square","square","square","square","square"]},"edges":{"from":["hth_dat","hth_less_ma","hth_ma","hth_comp","hth_less","hth_dat"],"to":["hth_ma","hth_extract_less","hth_extract_ma","hth_dat","hth_less_ma","hth_less"],"arrows":["to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","dot","square"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
 </div>
 <h1 id="implementing-other-models">Implementing other models</h1>
 <p>Here is the pipeline for fitting the network meta-analysis models.
@@ -2305,21 +2337,21 @@ Functions are documented using <code>roxygen::2</code> and can be
 searched using R, for example <code>?smd_calc</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># fit dat and fit arms are the most relevant targets for the model implementation</span>
-<span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_visnetwork.html'>tar_visnetwork</a></span><span class='op'>(</span>
-  <span class='co'># this first argument is only required for static output</span>
-  callr_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>spinner <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
-  names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fit_dat"</span>, <span class='st'>"fit_arms"</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># fit dat and fit arms are the most relevant targets for the model implementation</span></span>
+<span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_visnetwork.html'>tar_visnetwork</a></span><span class='op'>(</span></span>
+<span>  <span class='co'># this first argument is only required for static output</span></span>
+<span>  callr_arguments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>spinner <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,</span>
+<span>  names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fit_dat"</span>, <span class='st'>"fit_arms"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>── [1mAttaching packages[22m ─────────────────────────────────────── tidyverse 1.3.1 ──
-[32m✓[39m [34mggplot2[39m 3.3.5     [32m✓[39m [34mpurrr  [39m 0.3.4
-[32m✓[39m [34mtibble [39m 3.1.6     [32m✓[39m [34mdplyr  [39m 1.0.8
-[32m✓[39m [34mtidyr  [39m 1.2.0     [32m✓[39m [34mstringr[39m 1.4.0
-[32m✓[39m [34mreadr  [39m 2.1.2     [32m✓[39m [34mforcats[39m 0.5.1
+[32m✔[39m [34mggplot2[39m 3.3.6     [32m✔[39m [34mpurrr  [39m 0.3.4
+[32m✔[39m [34mtibble [39m 3.1.7     [32m✔[39m [34mdplyr  [39m 1.0.9
+[32m✔[39m [34mtidyr  [39m 1.2.0     [32m✔[39m [34mstringr[39m 1.4.0
+[32m✔[39m [34mreadr  [39m 2.1.2     [32m✔[39m [34mforcats[39m 0.5.1
 ── [1mConflicts[22m ────────────────────────────────────────── tidyverse_conflicts() ──
-[31mx[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-[31mx[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+Loading required package: ggh4x
 
 Attaching package: ‘janitor’
 
@@ -2350,8 +2382,8 @@ Loading the &#39;metafor&#39; package (version 3.4-0). For an
 introduction to the package please type: help(metafor)
 
 [conflicted] Will prefer [34mdplyr::filter[39m over any other package</code></pre>
-<div id="htmlwidget-f95c4dfb1875d80489fe" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f95c4dfb1875d80489fe">{"x":{"nodes":{"name":["count_unlisted","fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"type":["stem","pattern","pattern","stem","stem","stem","stem","stem","stem","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.028,148.417,0.651,0.069,0.001,0.053,0.146,0.008,0.099,0.014,0,0.211],"bytes":[4675,123978380,27899,725,7029,7029,3230,5313,9199,7066,388,7025],"branches":[null,4,4,null,null,null,null,null,null,null,null,null],"label":["count_unlisted","fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["count_unlisted","fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"level":[1,10,9,3,5,4,6,6,7,8,1,2],"shape":["dot","square","square","dot","dot","dot","dot","dot","dot","dot","dot","dot"]},"edges":{"from":["count_unlisted","tidy_dat","outcome_groups","fit_dat","obs_control","obs_int","int_class","wide_obs","wide_obs","model_dat","obs_long","obs_class_fix","model_dat"],"to":["wide_obs","wide_obs","fit_dat","fit_arms","obs_long","obs_long","obs_class_fix","obs_class_fix","int_class","obs_control","outcome_groups","model_dat","obs_int"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","dot","square"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-95692212e9668bf82381" style="width:624px;height:384px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-95692212e9668bf82381">{"x":{"nodes":{"name":["count_unlisted","fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"type":["stem","pattern","pattern","stem","stem","stem","stem","stem","stem","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.026,176.615,0.195,0.016,0,0.016,0.046,0.004,0.025,0.01,0,0.095],"bytes":[4312,123962911,26474,726,6056,6056,3227,4321,7986,5886,389,6054],"branches":[null,4,4,null,null,null,null,null,null,null,null,null],"label":["count_unlisted","fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"id":["count_unlisted","fit_arms","fit_dat","int_class","model_dat","obs_class_fix","obs_control","obs_int","obs_long","outcome_groups","tidy_dat","wide_obs"],"level":[1,10,9,3,5,4,6,6,7,8,1,2],"shape":["dot","square","square","dot","dot","dot","dot","dot","dot","dot","dot","dot"]},"edges":{"from":["count_unlisted","tidy_dat","outcome_groups","fit_dat","obs_control","obs_int","int_class","wide_obs","wide_obs","model_dat","obs_long","obs_class_fix","model_dat"],"to":["wide_obs","wide_obs","fit_dat","fit_arms","obs_long","obs_long","obs_class_fix","obs_class_fix","int_class","obs_control","outcome_groups","model_dat","obs_int"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"interaction":{"zoomSpeed":1},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Pattern"],"color":["#354823","#899DA4","#899DA4"],"shape":["dot","dot","square"]},"nodesToDataframe":true},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>New targets can be appended to the pipeline that calculate the data
 to be fitted differently, or add a different model algorithm. These can

@@ -50,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -73,9 +74,9 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
 code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
@@ -93,8 +94,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2022-04-13"/>
-  <meta property="article:created" itemprop="dateCreated" content="2022-04-13"/>
+  <meta property="article:published" itemprop="datePublished" content="2022-06-30"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-06-30"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="spunk::: Exploratory data analyses"/>
@@ -112,7 +113,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Exploratory data analyses"]},{"type":"character","attributes":{},"value":["Summaries of interventions and classes.\n"]},{"type":"character","attributes":{},"value":["2022-04-13"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Exploratory data analyses"]},{"type":"character","attributes":{},"value":["Summaries of interventions and classes.\n"]},{"type":"character","attributes":{},"value":["2022-06-30"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1033,10 +1034,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     margin-top: 1.5em;
   }
 
-  .figure img {
-    width: 100%;
-  }
-
   .figure .caption {
     color: rgba(0, 0, 0, 0.6);
     font-size: 12px;
@@ -1866,6 +1863,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
+        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
+          var fn = $(this).children()[0]
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
           return "<p>" + $('#ref-' + ref).html() + "</p>";
@@ -1880,6 +1883,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
 
       // clear polling timer
       clearInterval(tid);
@@ -1979,6 +2007,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -2001,7 +2031,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
       });
     }
 
@@ -2040,7 +2070,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2060,7 +2090,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Exploratory data analyses","description":"Summaries of interventions and classes.","authors":[],"publishedDate":"2022-04-13T00:00:00.000+02:00"}
+{"title":"Exploratory data analyses","description":"Summaries of interventions and classes.","authors":[],"publishedDate":"2022-06-30T00:00:00.000+02:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2083,21 +2113,9 @@ Living analyses
 <a href="sensitivity.html">Sensitivity</a>
 </div>
 </div>
-<a href="methods.html">Methods</a>
 <a href="extending.html">Contributing</a>
 </div>
 <div class="nav-right">
-<div class="nav-dropdown">
-<button class="nav-dropbtn">
-Within-analysis documentation
- 
-<span class="down-arrow">&#x25BE;</span>
-</button>
-<div class="nav-dropdown-content">
-<a href="access-analysis.html">Access analysis</a>
-<a href="integrity.html">Data integrity</a>
-</div>
-</div>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2119,19 +2137,21 @@ Within-analysis documentation
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#summary-of-classes">Summary of classes</a></li>
-<li><a href="#summary-of-interventions">Summary of interventions</a></li>
+<li><a href="#summary-of-classes" id="toc-summary-of-classes">Summary of
+classes</a></li>
+<li><a href="#summary-of-interventions"
+id="toc-summary-of-interventions">Summary of interventions</a></li>
 </ul>
 </nav>
 </div>
 <h1 id="summary-of-classes">Summary of classes</h1>
 <div class="layout-chunk" data-layout="l-body">
-<div id="ckmwedoxlu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="exbhxyqzum" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ckmwedoxlu .gt_table {
+#exbhxyqzum .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2156,7 +2176,7 @@ Within-analysis documentation
   border-left-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_heading {
+#exbhxyqzum .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2168,7 +2188,7 @@ Within-analysis documentation
   border-right-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_title {
+#exbhxyqzum .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2180,7 +2200,7 @@ Within-analysis documentation
   border-bottom-width: 0;
 }
 
-#ckmwedoxlu .gt_subtitle {
+#exbhxyqzum .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2192,13 +2212,13 @@ Within-analysis documentation
   border-top-width: 0;
 }
 
-#ckmwedoxlu .gt_bottom_border {
+#exbhxyqzum .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_col_headings {
+#exbhxyqzum .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2213,7 +2233,7 @@ Within-analysis documentation
   border-right-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_col_heading {
+#exbhxyqzum .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2233,7 +2253,7 @@ Within-analysis documentation
   overflow-x: hidden;
 }
 
-#ckmwedoxlu .gt_column_spanner_outer {
+#exbhxyqzum .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2245,15 +2265,15 @@ Within-analysis documentation
   padding-right: 4px;
 }
 
-#ckmwedoxlu .gt_column_spanner_outer:first-child {
+#exbhxyqzum .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ckmwedoxlu .gt_column_spanner_outer:last-child {
+#exbhxyqzum .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ckmwedoxlu .gt_column_spanner {
+#exbhxyqzum .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2265,7 +2285,7 @@ Within-analysis documentation
   width: 100%;
 }
 
-#ckmwedoxlu .gt_group_heading {
+#exbhxyqzum .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2290,7 +2310,7 @@ Within-analysis documentation
   vertical-align: middle;
 }
 
-#ckmwedoxlu .gt_empty_group_heading {
+#exbhxyqzum .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2305,15 +2325,15 @@ Within-analysis documentation
   vertical-align: middle;
 }
 
-#ckmwedoxlu .gt_from_md > :first-child {
+#exbhxyqzum .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ckmwedoxlu .gt_from_md > :last-child {
+#exbhxyqzum .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ckmwedoxlu .gt_row {
+#exbhxyqzum .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2332,7 +2352,7 @@ Within-analysis documentation
   overflow-x: hidden;
 }
 
-#ckmwedoxlu .gt_stub {
+#exbhxyqzum .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2345,7 +2365,7 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#ckmwedoxlu .gt_stub_row_group {
+#exbhxyqzum .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2359,11 +2379,11 @@ Within-analysis documentation
   vertical-align: top;
 }
 
-#ckmwedoxlu .gt_row_group_first td {
+#exbhxyqzum .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ckmwedoxlu .gt_summary_row {
+#exbhxyqzum .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2373,16 +2393,16 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#ckmwedoxlu .gt_first_summary_row {
+#exbhxyqzum .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_first_summary_row.thick {
+#exbhxyqzum .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ckmwedoxlu .gt_last_summary_row {
+#exbhxyqzum .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2392,7 +2412,7 @@ Within-analysis documentation
   border-bottom-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_grand_summary_row {
+#exbhxyqzum .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2402,7 +2422,7 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#ckmwedoxlu .gt_first_grand_summary_row {
+#exbhxyqzum .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2412,11 +2432,11 @@ Within-analysis documentation
   border-top-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_striped {
+#exbhxyqzum .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ckmwedoxlu .gt_table_body {
+#exbhxyqzum .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2425,7 +2445,7 @@ Within-analysis documentation
   border-bottom-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_footnotes {
+#exbhxyqzum .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2439,7 +2459,7 @@ Within-analysis documentation
   border-right-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_footnote {
+#exbhxyqzum .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -2448,7 +2468,7 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#ckmwedoxlu .gt_sourcenotes {
+#exbhxyqzum .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2462,7 +2482,7 @@ Within-analysis documentation
   border-right-color: #D3D3D3;
 }
 
-#ckmwedoxlu .gt_sourcenote {
+#exbhxyqzum .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2470,60 +2490,69 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#ckmwedoxlu .gt_left {
+#exbhxyqzum .gt_left {
   text-align: left;
 }
 
-#ckmwedoxlu .gt_center {
+#exbhxyqzum .gt_center {
   text-align: center;
 }
 
-#ckmwedoxlu .gt_right {
+#exbhxyqzum .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ckmwedoxlu .gt_font_normal {
+#exbhxyqzum .gt_font_normal {
   font-weight: normal;
 }
 
-#ckmwedoxlu .gt_font_bold {
+#exbhxyqzum .gt_font_bold {
   font-weight: bold;
 }
 
-#ckmwedoxlu .gt_font_italic {
+#exbhxyqzum .gt_font_italic {
   font-style: italic;
 }
 
-#ckmwedoxlu .gt_super {
+#exbhxyqzum .gt_super {
   font-size: 65%;
 }
 
-#ckmwedoxlu .gt_footnote_marks {
+#exbhxyqzum .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#exbhxyqzum .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#ckmwedoxlu .gt_asterisk {
+#exbhxyqzum .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ckmwedoxlu .gt_slash_mark {
+#exbhxyqzum .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#ckmwedoxlu .gt_fraction_numerator {
+#exbhxyqzum .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#ckmwedoxlu .gt_fraction_denominator {
+#exbhxyqzum .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -2551,11 +2580,11 @@ Within-analysis documentation
     <tr class="gt_row_group_first"><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">amino acids</td>
 <td class="gt_row gt_right">10</td>
-<td class="gt_row gt_right">1244</td></tr>
+<td class="gt_row gt_right">1224</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">antioxidants</td>
-<td class="gt_row gt_right gt_striped">4</td>
-<td class="gt_row gt_right gt_striped">261</td></tr>
+<td class="gt_row gt_right gt_striped">3</td>
+<td class="gt_row gt_right gt_striped">173</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">coenzymes</td>
 <td class="gt_row gt_right">4</td>
@@ -2582,16 +2611,16 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_striped">68</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">vitamin/mineral combos</td>
-<td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">329</td></tr>
+<td class="gt_row gt_right">4</td>
+<td class="gt_row gt_right">500</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">vitamins</td>
 <td class="gt_row gt_right gt_striped">11</td>
 <td class="gt_row gt_right gt_striped">684</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_first_summary_row thick">total</td>
 <td class="gt_row gt_left gt_summary_row gt_first_summary_row thick">&mdash;</td>
-<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">61</td>
-<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">7,570</td></tr>
+<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">62</td>
+<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">7,633</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_last_summary_row">maximum</td>
 <td class="gt_row gt_left gt_summary_row gt_last_summary_row">&mdash;</td>
 <td class="gt_row gt_right gt_summary_row gt_last_summary_row">11</td>
@@ -2601,12 +2630,12 @@ Within-analysis documentation
     </tr>
     <tr class="gt_row_group_first"><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">amino acids</td>
-<td class="gt_row gt_right">11</td>
-<td class="gt_row gt_right">1248</td></tr>
+<td class="gt_row gt_right">10</td>
+<td class="gt_row gt_right">1165</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">antioxidants</td>
-<td class="gt_row gt_right gt_striped">4</td>
-<td class="gt_row gt_right gt_striped">260</td></tr>
+<td class="gt_row gt_right gt_striped">3</td>
+<td class="gt_row gt_right gt_striped">172</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">coenzymes</td>
 <td class="gt_row gt_right">4</td>
@@ -2633,8 +2662,8 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_striped">68</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">vitamin/mineral combos</td>
-<td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">317</td></tr>
+<td class="gt_row gt_right">4</td>
+<td class="gt_row gt_right">488</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">vitamins</td>
 <td class="gt_row gt_right gt_striped">10</td>
@@ -2645,7 +2674,7 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">6,812</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_last_summary_row">maximum</td>
 <td class="gt_row gt_left gt_summary_row gt_last_summary_row">&mdash;</td>
-<td class="gt_row gt_right gt_summary_row gt_last_summary_row">11</td>
+<td class="gt_row gt_right gt_summary_row gt_last_summary_row">10</td>
 <td class="gt_row gt_right gt_summary_row gt_last_summary_row">2,453</td></tr>
     <tr class="gt_group_heading_row">
       <td colspan="4" class="gt_group_heading">motility</td>
@@ -2653,11 +2682,11 @@ Within-analysis documentation
     <tr class="gt_row_group_first"><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">amino acids</td>
 <td class="gt_row gt_right">11</td>
-<td class="gt_row gt_right">1152</td></tr>
+<td class="gt_row gt_right">1173</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">antioxidants</td>
-<td class="gt_row gt_right gt_striped">4</td>
-<td class="gt_row gt_right gt_striped">267</td></tr>
+<td class="gt_row gt_right gt_striped">3</td>
+<td class="gt_row gt_right gt_striped">179</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">coenzymes</td>
 <td class="gt_row gt_right">4</td>
@@ -2668,8 +2697,8 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_striped">403</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">minerals</td>
-<td class="gt_row gt_right">9</td>
-<td class="gt_row gt_right">2603</td></tr>
+<td class="gt_row gt_right">10</td>
+<td class="gt_row gt_right">2700</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">omega-3 fatty acids</td>
 <td class="gt_row gt_right gt_striped">10</td>
@@ -2684,31 +2713,31 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_striped">68</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">vitamin/mineral combos</td>
-<td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">320</td></tr>
+<td class="gt_row gt_right">4</td>
+<td class="gt_row gt_right">491</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">vitamins</td>
-<td class="gt_row gt_right gt_striped">11</td>
-<td class="gt_row gt_right gt_striped">684</td></tr>
+<td class="gt_row gt_right gt_striped">12</td>
+<td class="gt_row gt_right gt_striped">770</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_first_summary_row thick">total</td>
 <td class="gt_row gt_left gt_summary_row gt_first_summary_row thick">&mdash;</td>
-<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">61</td>
-<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">7,408</td></tr>
+<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">64</td>
+<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">7,695</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_last_summary_row">maximum</td>
 <td class="gt_row gt_left gt_summary_row gt_last_summary_row">&mdash;</td>
-<td class="gt_row gt_right gt_summary_row gt_last_summary_row">11</td>
-<td class="gt_row gt_right gt_summary_row gt_last_summary_row">2,603</td></tr>
+<td class="gt_row gt_right gt_summary_row gt_last_summary_row">12</td>
+<td class="gt_row gt_right gt_summary_row gt_last_summary_row">2,700</td></tr>
     <tr class="gt_group_heading_row">
       <td colspan="4" class="gt_group_heading">volume</td>
     </tr>
     <tr class="gt_row_group_first"><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">amino acids</td>
-<td class="gt_row gt_right">7</td>
-<td class="gt_row gt_right">606</td></tr>
+<td class="gt_row gt_right">6</td>
+<td class="gt_row gt_right">509</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">antioxidants</td>
-<td class="gt_row gt_right gt_striped">3</td>
-<td class="gt_row gt_right gt_striped">218</td></tr>
+<td class="gt_row gt_right gt_striped">2</td>
+<td class="gt_row gt_right gt_striped">130</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">coenzymes</td>
 <td class="gt_row gt_right">3</td>
@@ -2719,8 +2748,8 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_striped">137</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">minerals</td>
-<td class="gt_row gt_right">3</td>
-<td class="gt_row gt_right">2147</td></tr>
+<td class="gt_row gt_right">4</td>
+<td class="gt_row gt_right">2244</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">omega-3 fatty acids</td>
 <td class="gt_row gt_right gt_striped">8</td>
@@ -2735,8 +2764,8 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_striped">68</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left">vitamin/mineral combos</td>
-<td class="gt_row gt_right">1</td>
-<td class="gt_row gt_right">269</td></tr>
+<td class="gt_row gt_right">2</td>
+<td class="gt_row gt_right">357</td></tr>
     <tr><td class="gt_row gt_right gt_stub"></td>
 <td class="gt_row gt_left gt_striped">vitamins</td>
 <td class="gt_row gt_right gt_striped">5</td>
@@ -2748,7 +2777,7 @@ Within-analysis documentation
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_last_summary_row">maximum</td>
 <td class="gt_row gt_left gt_summary_row gt_last_summary_row">&mdash;</td>
 <td class="gt_row gt_right gt_summary_row gt_last_summary_row">8</td>
-<td class="gt_row gt_right gt_summary_row gt_last_summary_row">2,147</td></tr>
+<td class="gt_row gt_right gt_summary_row gt_last_summary_row">2,244</td></tr>
   </tbody>
   
   
@@ -2757,12 +2786,12 @@ Within-analysis documentation
 </div>
 <h1 id="summary-of-interventions">Summary of interventions</h1>
 <div class="layout-chunk" data-layout="l-body">
-<div id="srcpgnunxv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="krboyexvfd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#srcpgnunxv .gt_table {
+#krboyexvfd .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2787,7 +2816,7 @@ Within-analysis documentation
   border-left-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_heading {
+#krboyexvfd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2799,7 +2828,7 @@ Within-analysis documentation
   border-right-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_title {
+#krboyexvfd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2811,7 +2840,7 @@ Within-analysis documentation
   border-bottom-width: 0;
 }
 
-#srcpgnunxv .gt_subtitle {
+#krboyexvfd .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2823,13 +2852,13 @@ Within-analysis documentation
   border-top-width: 0;
 }
 
-#srcpgnunxv .gt_bottom_border {
+#krboyexvfd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_col_headings {
+#krboyexvfd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2844,7 +2873,7 @@ Within-analysis documentation
   border-right-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_col_heading {
+#krboyexvfd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2864,7 +2893,7 @@ Within-analysis documentation
   overflow-x: hidden;
 }
 
-#srcpgnunxv .gt_column_spanner_outer {
+#krboyexvfd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2876,15 +2905,15 @@ Within-analysis documentation
   padding-right: 4px;
 }
 
-#srcpgnunxv .gt_column_spanner_outer:first-child {
+#krboyexvfd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#srcpgnunxv .gt_column_spanner_outer:last-child {
+#krboyexvfd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#srcpgnunxv .gt_column_spanner {
+#krboyexvfd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2896,7 +2925,7 @@ Within-analysis documentation
   width: 100%;
 }
 
-#srcpgnunxv .gt_group_heading {
+#krboyexvfd .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2921,7 +2950,7 @@ Within-analysis documentation
   vertical-align: middle;
 }
 
-#srcpgnunxv .gt_empty_group_heading {
+#krboyexvfd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2936,15 +2965,15 @@ Within-analysis documentation
   vertical-align: middle;
 }
 
-#srcpgnunxv .gt_from_md > :first-child {
+#krboyexvfd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#srcpgnunxv .gt_from_md > :last-child {
+#krboyexvfd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#srcpgnunxv .gt_row {
+#krboyexvfd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2963,7 +2992,7 @@ Within-analysis documentation
   overflow-x: hidden;
 }
 
-#srcpgnunxv .gt_stub {
+#krboyexvfd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2976,7 +3005,7 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#srcpgnunxv .gt_stub_row_group {
+#krboyexvfd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2990,11 +3019,11 @@ Within-analysis documentation
   vertical-align: top;
 }
 
-#srcpgnunxv .gt_row_group_first td {
+#krboyexvfd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#srcpgnunxv .gt_summary_row {
+#krboyexvfd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3004,16 +3033,16 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#srcpgnunxv .gt_first_summary_row {
+#krboyexvfd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_first_summary_row.thick {
+#krboyexvfd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#srcpgnunxv .gt_last_summary_row {
+#krboyexvfd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3023,7 +3052,7 @@ Within-analysis documentation
   border-bottom-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_grand_summary_row {
+#krboyexvfd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3033,7 +3062,7 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#srcpgnunxv .gt_first_grand_summary_row {
+#krboyexvfd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3043,11 +3072,11 @@ Within-analysis documentation
   border-top-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_striped {
+#krboyexvfd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#srcpgnunxv .gt_table_body {
+#krboyexvfd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3056,7 +3085,7 @@ Within-analysis documentation
   border-bottom-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_footnotes {
+#krboyexvfd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3070,7 +3099,7 @@ Within-analysis documentation
   border-right-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_footnote {
+#krboyexvfd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -3079,7 +3108,7 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#srcpgnunxv .gt_sourcenotes {
+#krboyexvfd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3093,7 +3122,7 @@ Within-analysis documentation
   border-right-color: #D3D3D3;
 }
 
-#srcpgnunxv .gt_sourcenote {
+#krboyexvfd .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3101,60 +3130,69 @@ Within-analysis documentation
   padding-right: 5px;
 }
 
-#srcpgnunxv .gt_left {
+#krboyexvfd .gt_left {
   text-align: left;
 }
 
-#srcpgnunxv .gt_center {
+#krboyexvfd .gt_center {
   text-align: center;
 }
 
-#srcpgnunxv .gt_right {
+#krboyexvfd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#srcpgnunxv .gt_font_normal {
+#krboyexvfd .gt_font_normal {
   font-weight: normal;
 }
 
-#srcpgnunxv .gt_font_bold {
+#krboyexvfd .gt_font_bold {
   font-weight: bold;
 }
 
-#srcpgnunxv .gt_font_italic {
+#krboyexvfd .gt_font_italic {
   font-style: italic;
 }
 
-#srcpgnunxv .gt_super {
+#krboyexvfd .gt_super {
   font-size: 65%;
 }
 
-#srcpgnunxv .gt_footnote_marks {
+#krboyexvfd .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#krboyexvfd .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#srcpgnunxv .gt_asterisk {
+#krboyexvfd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#srcpgnunxv .gt_slash_mark {
+#krboyexvfd .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#srcpgnunxv .gt_fraction_numerator {
+#krboyexvfd .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#srcpgnunxv .gt_fraction_denominator {
+#krboyexvfd .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -3182,7 +3220,7 @@ Within-analysis documentation
     <tr class="gt_row_group_first"><td class="gt_row gt_right gt_stub">amino acids</td>
 <td class="gt_row gt_left">l-carnitine/l-acetylcarnitine</td>
 <td class="gt_row gt_right">8</td>
-<td class="gt_row gt_right">779</td></tr>
+<td class="gt_row gt_right">759</td></tr>
     <tr><td class="gt_row gt_right gt_stub">amino acids</td>
 <td class="gt_row gt_left gt_striped">l-carnitine+cinnoxicam</td>
 <td class="gt_row gt_right gt_striped">1</td>
@@ -3197,8 +3235,8 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_striped">211</td></tr>
     <tr><td class="gt_row gt_right gt_stub">antioxidants</td>
 <td class="gt_row gt_left">antioxidants</td>
-<td class="gt_row gt_right">4</td>
-<td class="gt_row gt_right">261</td></tr>
+<td class="gt_row gt_right">3</td>
+<td class="gt_row gt_right">173</td></tr>
     <tr><td class="gt_row gt_right gt_stub">coenzymes</td>
 <td class="gt_row gt_left gt_striped">coenzyme q10</td>
 <td class="gt_row gt_right gt_striped">4</td>
@@ -3277,8 +3315,8 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_striped">269</td></tr>
     <tr><td class="gt_row gt_right gt_stub">vitamin/mineral combos</td>
 <td class="gt_row gt_left">vitamin/mineral supplements</td>
-<td class="gt_row gt_right">1</td>
-<td class="gt_row gt_right">60</td></tr>
+<td class="gt_row gt_right">3</td>
+<td class="gt_row gt_right">231</td></tr>
     <tr><td class="gt_row gt_right gt_stub">vitamins</td>
 <td class="gt_row gt_left gt_striped">folic acid</td>
 <td class="gt_row gt_right gt_striped">4</td>
@@ -3293,8 +3331,8 @@ Within-analysis documentation
 <td class="gt_row gt_right gt_striped">148</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_first_summary_row thick">total</td>
 <td class="gt_row gt_left gt_summary_row gt_first_summary_row thick">&mdash;</td>
-<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">64</td>
-<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">7,570</td></tr>
+<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">65</td>
+<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">7,633</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_last_summary_row">maximum</td>
 <td class="gt_row gt_left gt_summary_row gt_last_summary_row">&mdash;</td>
 <td class="gt_row gt_right gt_summary_row gt_last_summary_row">8</td>
@@ -3304,8 +3342,8 @@ Within-analysis documentation
     </tr>
     <tr class="gt_row_group_first"><td class="gt_row gt_right gt_stub">amino acids</td>
 <td class="gt_row gt_left">l-carnitine/l-acetylcarnitine</td>
-<td class="gt_row gt_right">10</td>
-<td class="gt_row gt_right">863</td></tr>
+<td class="gt_row gt_right">9</td>
+<td class="gt_row gt_right">780</td></tr>
     <tr><td class="gt_row gt_right gt_stub">amino acids</td>
 <td class="gt_row gt_left gt_striped">l-carnitine+cinnoxicam</td>
 <td class="gt_row gt_right gt_striped">1</td>
@@ -3316,8 +3354,8 @@ Within-analysis documentation
 <td class="gt_row gt_right">211</td></tr>
     <tr><td class="gt_row gt_right gt_stub">antioxidants</td>
 <td class="gt_row gt_left gt_striped">antioxidants</td>
-<td class="gt_row gt_right gt_striped">4</td>
-<td class="gt_row gt_right gt_striped">260</td></tr>
+<td class="gt_row gt_right gt_striped">3</td>
+<td class="gt_row gt_right gt_striped">172</td></tr>
     <tr><td class="gt_row gt_right gt_stub">coenzymes</td>
 <td class="gt_row gt_left">coenzyme q10</td>
 <td class="gt_row gt_right">4</td>
@@ -3370,77 +3408,85 @@ Within-analysis documentation
 <td class="gt_row gt_left">vitamin/mineral combos</td>
 <td class="gt_row gt_right">1</td>
 <td class="gt_row gt_right">60</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
-<td class="gt_row gt_left gt_striped">folic acid</td>
-<td class="gt_row gt_right gt_striped">4</td>
-<td class="gt_row gt_right gt_striped">191</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
-<td class="gt_row gt_left">vitamin c/e</td>
-<td class="gt_row gt_right">4</td>
-<td class="gt_row gt_right">300</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
-<td class="gt_row gt_left gt_striped">vitamin d3</td>
+    <tr><td class="gt_row gt_right gt_stub">vitamin/mineral combos</td>
+<td class="gt_row gt_left gt_striped">vitamin/mineral supplements</td>
 <td class="gt_row gt_right gt_striped">2</td>
-<td class="gt_row gt_right gt_striped">148</td></tr>
+<td class="gt_row gt_right gt_striped">171</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
+<td class="gt_row gt_left">folic acid</td>
+<td class="gt_row gt_right">4</td>
+<td class="gt_row gt_right">191</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
+<td class="gt_row gt_left gt_striped">vitamin c/e</td>
+<td class="gt_row gt_right gt_striped">4</td>
+<td class="gt_row gt_right gt_striped">300</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
+<td class="gt_row gt_left">vitamin d3</td>
+<td class="gt_row gt_right">2</td>
+<td class="gt_row gt_right">148</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_first_summary_row thick">total</td>
 <td class="gt_row gt_left gt_summary_row gt_first_summary_row thick">&mdash;</td>
 <td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">53</td>
 <td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">6,812</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_last_summary_row">maximum</td>
 <td class="gt_row gt_left gt_summary_row gt_last_summary_row">&mdash;</td>
-<td class="gt_row gt_right gt_summary_row gt_last_summary_row">10</td>
+<td class="gt_row gt_right gt_summary_row gt_last_summary_row">9</td>
 <td class="gt_row gt_right gt_summary_row gt_last_summary_row">2,012</td></tr>
     <tr class="gt_group_heading_row">
       <td colspan="4" class="gt_group_heading">motility</td>
     </tr>
     <tr class="gt_row_group_first"><td class="gt_row gt_right gt_stub">amino acids</td>
-<td class="gt_row gt_left">l-carnitine/l-acetylcarnitine</td>
-<td class="gt_row gt_right">10</td>
-<td class="gt_row gt_right">767</td></tr>
+<td class="gt_row gt_left gt_striped">l-carnitine/l-acetylcarnitine</td>
+<td class="gt_row gt_right gt_striped">10</td>
+<td class="gt_row gt_right gt_striped">788</td></tr>
     <tr><td class="gt_row gt_right gt_stub">amino acids</td>
-<td class="gt_row gt_left gt_striped">l-carnitine+cinnoxicam</td>
-<td class="gt_row gt_right gt_striped">1</td>
-<td class="gt_row gt_right gt_striped">174</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">amino acids</td>
-<td class="gt_row gt_left">n-acetyl cysteine</td>
+<td class="gt_row gt_left">l-carnitine+cinnoxicam</td>
 <td class="gt_row gt_right">1</td>
-<td class="gt_row gt_right">211</td></tr>
+<td class="gt_row gt_right">174</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">amino acids</td>
+<td class="gt_row gt_left gt_striped">n-acetyl cysteine</td>
+<td class="gt_row gt_right gt_striped">1</td>
+<td class="gt_row gt_right gt_striped">211</td></tr>
     <tr><td class="gt_row gt_right gt_stub">antioxidants</td>
-<td class="gt_row gt_left gt_striped">antioxidants</td>
-<td class="gt_row gt_right gt_striped">4</td>
-<td class="gt_row gt_right gt_striped">267</td></tr>
+<td class="gt_row gt_left">antioxidants</td>
+<td class="gt_row gt_right">3</td>
+<td class="gt_row gt_right">179</td></tr>
     <tr><td class="gt_row gt_right gt_stub">coenzymes</td>
-<td class="gt_row gt_left">coenzyme q10</td>
-<td class="gt_row gt_right">4</td>
-<td class="gt_row gt_right">505</td></tr>
+<td class="gt_row gt_left gt_striped">coenzyme q10</td>
+<td class="gt_row gt_right gt_striped">4</td>
+<td class="gt_row gt_right gt_striped">505</td></tr>
     <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
-<td class="gt_row gt_left gt_striped">carob</td>
-<td class="gt_row gt_right gt_striped">1</td>
-<td class="gt_row gt_right gt_striped">57</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
-<td class="gt_row gt_left">coenzyme-q10 + l-carnitine + lycopene + zinc high dose</td>
+<td class="gt_row gt_left">carob</td>
 <td class="gt_row gt_right">1</td>
-<td class="gt_row gt_right">125</td></tr>
+<td class="gt_row gt_right">57</td></tr>
     <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
-<td class="gt_row gt_left gt_striped">herb/mineral supplement</td>
+<td class="gt_row gt_left gt_striped">coenzyme-q10 + l-carnitine + lycopene + zinc high dose</td>
 <td class="gt_row gt_right gt_striped">1</td>
-<td class="gt_row gt_right gt_striped">44</td></tr>
+<td class="gt_row gt_right gt_striped">125</td></tr>
     <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
-<td class="gt_row gt_left">micronutrient supplement</td>
+<td class="gt_row gt_left">herb/mineral supplement</td>
 <td class="gt_row gt_right">1</td>
-<td class="gt_row gt_right">87</td></tr>
+<td class="gt_row gt_right">44</td></tr>
     <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
-<td class="gt_row gt_left gt_striped">prelox</td>
+<td class="gt_row gt_left gt_striped">micronutrient supplement</td>
 <td class="gt_row gt_right gt_striped">1</td>
-<td class="gt_row gt_right gt_striped">50</td></tr>
+<td class="gt_row gt_right gt_striped">87</td></tr>
     <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
-<td class="gt_row gt_left">spirulina</td>
+<td class="gt_row gt_left">prelox</td>
 <td class="gt_row gt_right">1</td>
-<td class="gt_row gt_right">40</td></tr>
+<td class="gt_row gt_right">50</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
+<td class="gt_row gt_left gt_striped">spirulina</td>
+<td class="gt_row gt_right gt_striped">1</td>
+<td class="gt_row gt_right gt_striped">40</td></tr>
     <tr><td class="gt_row gt_right gt_stub">minerals</td>
-<td class="gt_row gt_left gt_striped">magnesium</td>
+<td class="gt_row gt_left">magnesium</td>
+<td class="gt_row gt_right">1</td>
+<td class="gt_row gt_right">20</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">minerals</td>
+<td class="gt_row gt_left gt_striped">minerals</td>
 <td class="gt_row gt_right gt_striped">1</td>
-<td class="gt_row gt_right gt_striped">20</td></tr>
+<td class="gt_row gt_right gt_striped">97</td></tr>
     <tr><td class="gt_row gt_right gt_stub">minerals</td>
 <td class="gt_row gt_left">selenium supplements</td>
 <td class="gt_row gt_right">2</td>
@@ -3477,22 +3523,26 @@ Within-analysis documentation
 <td class="gt_row gt_left">vitamin/mineral combos</td>
 <td class="gt_row gt_right">1</td>
 <td class="gt_row gt_right">60</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
-<td class="gt_row gt_left gt_striped">folic acid</td>
-<td class="gt_row gt_right gt_striped">4</td>
-<td class="gt_row gt_right gt_striped">191</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
-<td class="gt_row gt_left">vitamin c/e</td>
-<td class="gt_row gt_right">5</td>
-<td class="gt_row gt_right">345</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
-<td class="gt_row gt_left gt_striped">vitamin d3</td>
+    <tr><td class="gt_row gt_right gt_stub">vitamin/mineral combos</td>
+<td class="gt_row gt_left gt_striped">vitamin/mineral supplements</td>
 <td class="gt_row gt_right gt_striped">2</td>
-<td class="gt_row gt_right gt_striped">148</td></tr>
+<td class="gt_row gt_right gt_striped">171</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
+<td class="gt_row gt_left">folic acid</td>
+<td class="gt_row gt_right">4</td>
+<td class="gt_row gt_right">191</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
+<td class="gt_row gt_left gt_striped">vitamin c/e</td>
+<td class="gt_row gt_right gt_striped">5</td>
+<td class="gt_row gt_right gt_striped">345</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
+<td class="gt_row gt_left">vitamin d3</td>
+<td class="gt_row gt_right">3</td>
+<td class="gt_row gt_right">234</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_first_summary_row thick">total</td>
 <td class="gt_row gt_left gt_summary_row gt_first_summary_row thick">&mdash;</td>
-<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">62</td>
-<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">7,408</td></tr>
+<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">65</td>
+<td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">7,695</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_last_summary_row">maximum</td>
 <td class="gt_row gt_left gt_summary_row gt_last_summary_row">&mdash;</td>
 <td class="gt_row gt_right gt_summary_row gt_last_summary_row">10</td>
@@ -3501,29 +3551,33 @@ Within-analysis documentation
       <td colspan="4" class="gt_group_heading">volume</td>
     </tr>
     <tr class="gt_row_group_first"><td class="gt_row gt_right gt_stub">amino acids</td>
-<td class="gt_row gt_left">l-carnitine/l-acetylcarnitine</td>
-<td class="gt_row gt_right">6</td>
-<td class="gt_row gt_right">395</td></tr>
+<td class="gt_row gt_left gt_striped">l-carnitine/l-acetylcarnitine</td>
+<td class="gt_row gt_right gt_striped">5</td>
+<td class="gt_row gt_right gt_striped">298</td></tr>
     <tr><td class="gt_row gt_right gt_stub">amino acids</td>
-<td class="gt_row gt_left gt_striped">n-acetyl cysteine</td>
-<td class="gt_row gt_right gt_striped">1</td>
-<td class="gt_row gt_right gt_striped">211</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">antioxidants</td>
-<td class="gt_row gt_left">antioxidants</td>
-<td class="gt_row gt_right">3</td>
-<td class="gt_row gt_right">218</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">coenzymes</td>
-<td class="gt_row gt_left gt_striped">coenzyme q10</td>
-<td class="gt_row gt_right gt_striped">3</td>
-<td class="gt_row gt_right gt_striped">450</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
-<td class="gt_row gt_left">micronutrient supplement</td>
+<td class="gt_row gt_left">n-acetyl cysteine</td>
 <td class="gt_row gt_right">1</td>
-<td class="gt_row gt_right">87</td></tr>
+<td class="gt_row gt_right">211</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">antioxidants</td>
+<td class="gt_row gt_left gt_striped">antioxidants</td>
+<td class="gt_row gt_right gt_striped">2</td>
+<td class="gt_row gt_right gt_striped">130</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">coenzymes</td>
+<td class="gt_row gt_left">coenzyme q10</td>
+<td class="gt_row gt_right">3</td>
+<td class="gt_row gt_right">450</td></tr>
     <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
-<td class="gt_row gt_left gt_striped">prelox</td>
+<td class="gt_row gt_left gt_striped">micronutrient supplement</td>
 <td class="gt_row gt_right gt_striped">1</td>
-<td class="gt_row gt_right gt_striped">50</td></tr>
+<td class="gt_row gt_right gt_striped">87</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">dietary supplements</td>
+<td class="gt_row gt_left">prelox</td>
+<td class="gt_row gt_right">1</td>
+<td class="gt_row gt_right">50</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">minerals</td>
+<td class="gt_row gt_left gt_striped">minerals</td>
+<td class="gt_row gt_right gt_striped">1</td>
+<td class="gt_row gt_right gt_striped">97</td></tr>
     <tr><td class="gt_row gt_right gt_stub">minerals</td>
 <td class="gt_row gt_left">selenium supplements</td>
 <td class="gt_row gt_right">1</td>
@@ -3552,18 +3606,22 @@ Within-analysis documentation
 <td class="gt_row gt_left">vitamin d3 + calcium</td>
 <td class="gt_row gt_right">1</td>
 <td class="gt_row gt_right">269</td></tr>
-    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
-<td class="gt_row gt_left gt_striped">folic acid</td>
+    <tr><td class="gt_row gt_right gt_stub">vitamin/mineral combos</td>
+<td class="gt_row gt_left gt_striped">vitamin/mineral supplements</td>
 <td class="gt_row gt_right gt_striped">1</td>
-<td class="gt_row gt_right gt_striped">47</td></tr>
+<td class="gt_row gt_right gt_striped">88</td></tr>
     <tr><td class="gt_row gt_right gt_stub">vitamins</td>
-<td class="gt_row gt_left">vitamin c/e</td>
-<td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">121</td></tr>
+<td class="gt_row gt_left">folic acid</td>
+<td class="gt_row gt_right">1</td>
+<td class="gt_row gt_right">47</td></tr>
     <tr><td class="gt_row gt_right gt_stub">vitamins</td>
-<td class="gt_row gt_left gt_striped">vitamin d3</td>
+<td class="gt_row gt_left gt_striped">vitamin c/e</td>
 <td class="gt_row gt_right gt_striped">2</td>
-<td class="gt_row gt_right gt_striped">148</td></tr>
+<td class="gt_row gt_right gt_striped">121</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">vitamins</td>
+<td class="gt_row gt_left">vitamin d3</td>
+<td class="gt_row gt_right">2</td>
+<td class="gt_row gt_right">148</td></tr>
     <tr><td class="gt_row gt_right gt_stub gt_summary_row gt_first_summary_row thick">total</td>
 <td class="gt_row gt_left gt_summary_row gt_first_summary_row thick">&mdash;</td>
 <td class="gt_row gt_right gt_summary_row gt_first_summary_row thick">35</td>
@@ -3578,7 +3636,8 @@ Within-analysis documentation
 </table>
 </div>
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

@@ -50,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -73,9 +74,9 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
 code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
@@ -93,8 +94,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2022-06-01"/>
-  <meta property="article:created" itemprop="dateCreated" content="2022-06-01"/>
+  <meta property="article:published" itemprop="datePublished" content="2022-06-30"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-06-30"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="spunk::: Machine-readable data"/>
@@ -112,7 +113,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Machine-readable data"]},{"type":"character","attributes":{},"value":["Using these data in future analyses\n"]},{"type":"character","attributes":{},"value":["2022-06-01"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Machine-readable data"]},{"type":"character","attributes":{},"value":["Using these data in future analyses\n"]},{"type":"character","attributes":{},"value":["2022-06-30"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1033,10 +1034,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     margin-top: 1.5em;
   }
 
-  .figure img {
-    width: 100%;
-  }
-
   .figure .caption {
     color: rgba(0, 0, 0, 0.6);
     font-size: 12px;
@@ -1866,6 +1863,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
+        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
+          var fn = $(this).children()[0]
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
           return "<p>" + $('#ref-' + ref).html() + "</p>";
@@ -1880,6 +1883,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
 
       // clear polling timer
       clearInterval(tid);
@@ -1979,6 +2007,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -2001,7 +2031,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
       });
     }
 
@@ -2040,7 +2070,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2060,7 +2090,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Machine-readable data","description":"Using these data in future analyses","authors":[],"publishedDate":"2022-06-01T00:00:00.000+02:00"}
+{"title":"Machine-readable data","description":"Using these data in future analyses","authors":[],"publishedDate":"2022-06-30T00:00:00.000+02:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2107,11 +2137,15 @@ Living analyses
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#about-the-dataset">About the dataset</a></li>
-<li><a href="#more-specific-analyses">More specific analyses</a></li>
-<li><a href="#analyse-specific-classes-and-interventions">Analyse
-specific classes and interventions</a></li>
-<li><a href="#exporting-data">Exporting data</a></li>
+<li><a href="#about-the-dataset" id="toc-about-the-dataset">About the
+dataset</a></li>
+<li><a href="#more-specific-analyses"
+id="toc-more-specific-analyses">More specific analyses</a></li>
+<li><a href="#analyse-specific-classes-and-interventions"
+id="toc-analyse-specific-classes-and-interventions">Analyse specific
+classes and interventions</a></li>
+<li><a href="#exporting-data" id="toc-exporting-data">Exporting
+data</a></li>
 </ul>
 </nav>
 </div>
@@ -2119,9 +2153,8 @@ specific classes and interventions</a></li>
 <p>The data are provided as part of the packaged analysis.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>spunk</span><span class='op'>)</span>
-<span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_pattern.html'>head</a></span><span class='op'>(</span><span class='va'>spunk_dat</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>spunk</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>spunk_dat</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code># A tibble: 6 × 13
   outcome intervention  class moderator study control intervention_me…
@@ -2138,25 +2171,23 @@ specific classes and interventions</a></li>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># use devtools to install a package from github repository</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='st'>"devtools"</span><span class='op'>)</span>
-
-<span class='co'># install packaged analysis</span>
-<span class='fu'>devtools</span><span class='fu'>::</span><span class='fu'><a href='https://devtools.r-lib.org/reference/remote-reexports.html'>install_github</a></span><span class='op'>(</span><span class='st'>"softloud/spunk"</span><span class='op'>)</span>
-
-<span class='co'># load packaged analysis</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>spunk</span><span class='op'>)</span>
-
-<span class='co'># load data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>spunk_dat</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># use devtools to install a package from github repository</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='st'>"devtools"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># install packaged analysis</span></span>
+<span><span class='fu'>devtools</span><span class='fu'>::</span><span class='fu'><a href='https://remotes.r-lib.org/reference/install_github.html'>install_github</a></span><span class='op'>(</span><span class='st'>"softloud/spunk"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># load packaged analysis</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>spunk</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># load data</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>spunk_dat</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># columns in data</span>
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>spunk_dat</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># columns in data</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>spunk_dat</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code> [1] &quot;outcome&quot;           &quot;intervention&quot;      &quot;class&quot;            
  [4] &quot;moderator&quot;         &quot;study&quot;             &quot;control&quot;          
@@ -2166,9 +2197,8 @@ specific classes and interventions</a></li>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># description of each column</span>
-<span class='op'>?</span><span class='va'>spunk_dat</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># description of each column</span></span>
+<span><span class='op'>?</span><span class='va'>spunk_dat</span></span></code></pre>
 </div>
 </div>
 <p>The analyses provided in the associated Cochrane review are summaries
@@ -2188,12 +2218,11 @@ classes and interventions</h2>
 <code>tidyverse::</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
-<span class='fu'>conflicted</span><span class='fu'>::</span><span class='fu'><a href='https://conflicted.r-lib.org/reference/conflict_prefer.html'>conflict_prefer</a></span><span class='op'>(</span><span class='st'>"filter"</span>, <span class='st'>"dplyr"</span><span class='op'>)</span>
-
-<span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>intervention</span> <span class='op'>==</span> <span class='st'>"folic acid"</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='fu'>conflicted</span><span class='fu'>::</span><span class='fu'><a href='https://conflicted.r-lib.org/reference/conflict_prefer.html'>conflict_prefer</a></span><span class='op'>(</span><span class='st'>"filter"</span>, <span class='st'>"dplyr"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>intervention</span> <span class='op'>==</span> <span class='st'>"folic acid"</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code># A tibble: 13 × 13
    outcome intervention class moderator study control intervention_me…
@@ -2220,13 +2249,12 @@ studies that reported morphology comparisons with folic acid and
 placebo.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span>
-    <span class='va'>outcome</span> <span class='op'>==</span> <span class='st'>"morphology"</span>,
-    <span class='va'>intervention</span> <span class='op'>==</span> <span class='st'>"folic acid"</span>,
-    <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span><span class='op'>(</span><span class='va'>control</span>, <span class='st'>"placebo"</span><span class='op'>)</span>
-  <span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span></span>
+<span>    <span class='va'>outcome</span> <span class='op'>==</span> <span class='st'>"morphology"</span>,</span>
+<span>    <span class='va'>intervention</span> <span class='op'>==</span> <span class='st'>"folic acid"</span>,</span>
+<span>    <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span><span class='op'>(</span><span class='va'>control</span>, <span class='st'>"placebo"</span><span class='op'>)</span></span>
+<span>  <span class='op'>)</span></span></code></pre>
 </div>
 <pre><code># A tibble: 4 × 13
   outcome  intervention class moderator study control intervention_me…
@@ -2243,11 +2271,10 @@ placebo.</p>
 coenzyme-q10 with placebo, but allow for combined interventions.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span>
-    <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span><span class='op'>(</span><span class='va'>intervention</span>, <span class='st'>"coenzyme-q10"</span><span class='op'>)</span>
-    <span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span></span>
+<span>    <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span><span class='op'>(</span><span class='va'>intervention</span>, <span class='st'>"coenzyme-q10"</span><span class='op'>)</span></span>
+<span>    <span class='op'>)</span></span></code></pre>
 </div>
 <pre><code># A tibble: 4 × 13
   outcome  intervention class moderator study control intervention_me…
@@ -2263,11 +2290,10 @@ coenzyme-q10 with placebo, but allow for combined interventions.</p>
 <p>Class-level analysis data can be extracted in a similar manner.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span>
-    <span class='va'>class</span> <span class='op'>==</span> <span class='st'>"coenzymes"</span>
-  <span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span></span>
+<span>    <span class='va'>class</span> <span class='op'>==</span> <span class='st'>"coenzymes"</span></span>
+<span>  <span class='op'>)</span></span></code></pre>
 </div>
 <pre><code># A tibble: 15 × 13
    outcome intervention class moderator study control intervention_me…
@@ -2297,14 +2323,13 @@ dataset to a .csv format so that it can be imported into different
 software platforms.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># create a dataset object to write</span>
-<span class='va'>coenzyme_dat</span> <span class='op'>&lt;-</span>
-  <span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>class</span> <span class='op'>==</span> <span class='st'>"coenzymes"</span><span class='op'>)</span>
-
-<span class='co'># write data to .csv file</span>
-<span class='fu'><a href='https://readr.tidyverse.org/reference/write_delim.html'>write_csv</a></span><span class='op'>(</span><span class='va'>coenzyme_dat</span>, <span class='st'>"coenzyme_dat.csv"</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># create a dataset object to write</span></span>
+<span><span class='va'>coenzyme_dat</span> <span class='op'>&lt;-</span></span>
+<span>  <span class='va'>spunk_dat</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>class</span> <span class='op'>==</span> <span class='st'>"coenzymes"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># write data to .csv file</span></span>
+<span><span class='fu'><a href='https://readr.tidyverse.org/reference/write_delim.html'>write_csv</a></span><span class='op'>(</span><span class='va'>coenzyme_dat</span>, <span class='st'>"coenzyme_dat.csv"</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <div class="sourceCode" id="cb7"><pre

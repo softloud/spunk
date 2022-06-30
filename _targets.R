@@ -618,7 +618,7 @@ list(
         as_tibble(rownames = "cat") %>%
         rename(description = V1) %>%
         gt() %>%
-        cols_width(cat ~ px(100)) %>%
+        cols_width(cat ~ px(110)) %>%
         cols_width(description ~ px(300)) %>%
         tab_style(
           style = cell_text(v_align = "top"),
