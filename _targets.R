@@ -181,7 +181,8 @@ list(
     fit_dat,
     outcome_groups %>%
       mutate(class = if_else(
-        intervention == "vitamin c/e",
+        # this didn't work for VitaminsE need to look at input
+        intervention %in% c("vitamin c/e", "vitamin e"),
         "vitamins",
         class
       )) %>%
@@ -201,11 +202,13 @@ list(
           str_replace("ZinC", "Zinc") %>%
           str_replace("combos", "comb") %>%
           str_replace("\\+ala$", "\\+ALA") %>%
-          str_replace("\\se", "\\sE") %>%
+          str_replace("\\se", " E") %>%
           str_replace("/min", "/Min"),
         class = str_replace(class, "combos", "comb") %>%
           str_replace("/min", "/Min")
-      ),
+      )
+
+    ,
     pattern = map(outcome_groups),
     iteration = "list"
   ),
@@ -566,8 +569,8 @@ list(
                    show_trt_class = TRUE
                  )  +
                  ggplot2::theme(
-                   text = element_text(size = 8),
-                   legend.text = element_text(size = 12),
+                   text = element_text(size = 40),
+                   legend.text = element_text(size = 15),
                    legend.position = "bottom",
                    legend.box = "vertical"
                  )
@@ -575,8 +578,8 @@ list(
                sprintf("img/%s-net.png", this_outcome) %>%
                  ggsave(
                    filename = .,
-                   width = 4200,
-                   height = 3000,
+                   width = 5000 * 1.3,
+                   height = 4000 * 1.3,
                    units = "px"
                  )
              },
@@ -619,7 +622,7 @@ list(
         rename(description = V1) %>%
         gt() %>%
         cols_width(cat ~ px(110)) %>%
-        cols_width(description ~ px(300)) %>%
+        cols_width(description ~ px(150)) %>%
         tab_style(
           style = cell_text(v_align = "top"),
           locations = cells_body(columns = everything(),
@@ -628,7 +631,7 @@ list(
         tab_style(style = cell_text(weight = "bold", align = "right"),
                   cells_body(columns = cat)) %>%
         opt_table_lines("none") %>%
-        tab_options(column_labels.hidden = TRUE)
+        tab_options(column_labels.hidden = TRUE, table.font.size = 7)
 
       img_path <-
         sprintf("img/%s-pico.png", pico_dat$outcome)

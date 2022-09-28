@@ -5,7 +5,7 @@
 \alias{volume_obs}
 \title{Volume data}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 43 rows and 12 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 45 rows and 12 columns.
 }
 \usage{
 volume_obs

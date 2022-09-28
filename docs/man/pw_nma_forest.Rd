@@ -9,9 +9,6 @@ pw_nma_forest(dat)
 \arguments{
 \item{dat}{Nma and pw data}
 }
-\value{
-
-}
 \description{
 Comparison forest plot of ma and nma
 }

@@ -5,7 +5,7 @@
 \alias{motility_obs}
 \title{Motility data}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 85 rows and 12 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 86 rows and 12 columns.
 }
 \usage{
 motility_obs

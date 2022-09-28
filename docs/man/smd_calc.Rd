@@ -9,9 +9,6 @@ smd_calc(df)
 \arguments{
 \item{df}{}
 }
-\value{
-
-}
 \description{
 Using David's code.
 }

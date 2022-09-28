@@ -17,6 +17,7 @@ outcome_update <- function() {
   message("Update data")
 
   # usethis::use_data(outcome_key, overwrite = TRUE)
+  googlesheets4::gs4_deauth()
 
   count_obs <-
     googlesheets4::read_sheet(outcome_url, "Sperm count") %>%
@@ -39,6 +40,7 @@ outcome_update <- function() {
   usethis::use_data(morphology_obs, overwrite = TRUE)
   usethis::use_data(volume_obs, overwrite = TRUE)
 
+  devtools::document()
   devtools::build()
 
 }

@@ -9,13 +9,6 @@ nma_forest(mod, m_type = c("lor", "smd"), dir_impr = "upper")
 \arguments{
 \item{dir_impr}{}
 }
-\value{
-
-}
 \description{
 Title
-}
-\examples{
-
-
 }
