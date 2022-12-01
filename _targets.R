@@ -23,13 +23,21 @@ list(
              function(dat, this_outcome) {
                dat %>%
                  clean_names() %>%
-                 mutate(across(where(is.character), tolower)) %>%
+
+                 # debugging from this change
+                 # this code is just causing everything to meh
+                 # mutate(across(where(is.character), tolower)) %>%
+
+
                  mutate(outcome = this_outcome,
                         # get study
                         study = str_extract(study_id, "\\w+\\s\\d+\\w")) %>%
+
+                 # key assumptions about columns
                  rename(class = major_intervention_grouping,
                         intervention = grouped_intervention,
                         moderator = type_of_infertility) %>%
+
                  select(outcome, study, everything()) %>%
                  select(-starts_with("x"), -intervention_detailed, -study_id)
              }),
@@ -131,10 +139,10 @@ list(
       rename(intervention = control) %>%
       mutate(
         control = TRUE,
-        class = if_else(str_detect(intervention, "placebo"), "placebo", class),
+        class = if_else(str_detect(tolower(intervention), "placebo"), "Placebo", class),
         class = if_else(
-          str_detect(intervention, "supplement"),
-          "dietary supplements",
+          str_detect(tolower(intervention), "upplement"),
+          "Dietary supplements",
           class
         )
       )
@@ -182,33 +190,38 @@ list(
     outcome_groups %>%
       mutate(class = if_else(
         # this didn't work for VitaminsE need to look at input
-        intervention %in% c("vitamin c/e", "vitamin e"),
+        intervention %in% c("Vitamin C/E", "Vitamin E"),
         "vitamins",
         class
       )) %>%
       smd_calc() %>%
       mutate(
-        class = str_to_sentence(class),
-        intervention = str_to_sentence(intervention),
-        intervention =
-          str_replace(intervention,
-                      "Zinc/zinc", "Zinc/Zinc") %>%
-          str_replace("d3", "D3") %>%
-          str_replace("q10", "Q10") %>%
-          str_replace("l-", "L-") %>%
-          str_replace("/no", "/No") %>%
-          str_replace("c/e", "C/E") %>%
-          str_replace("c/", "C/") %>%
-          str_replace("ZinC", "Zinc") %>%
-          str_replace("combos", "comb") %>%
-          str_replace("\\+ala$", "\\+ALA") %>%
-          str_replace("\\se", " E") %>%
-          str_replace("/min", "/Min"),
-        class = str_replace(class, "combos", "comb") %>%
-          str_replace("/min", "/Min")
-      )
-
-    ,
+        # class = str_to_sentence(class),
+        # intervention =
+        #   str_replace(intervention,
+        #               "zinc/zinc", "Zinc/Zinc") %>%
+        #   str_replace("d3", "D3") %>%
+        #   str_replace("q10", "Q10") %>%
+        #   str_replace("l-", "L-") %>%
+        #   str_replace("/no", "/No") %>%
+        #   str_replace("c/e", "C/E") %>%
+        #   str_replace("c/", "C/") %>%
+        #   str_replace("inC", "inc") %>%
+        #   str_replace("combos", "comb") %>%
+        #   str_replace("\\+ala$", "\\+ALA") %>%
+        #   str_replace("\\se", " E") %>%
+        #   str_replace("/min", "/Min")
+        # %>%
+        #   str_replace(" c^", " C")
+        # %>%
+        #   str_replace("tds", "TDS") %>%
+        #   str_replace("ala", "ALA") %>%
+        #   str_replace("dha", "DHA") %>%
+        #   str_replace("fsv", "FSV")
+        # ,
+        # intervention = str_to_sentence(intervention),
+        class = str_replace(class, "combos", "comb") # %>% str_replace("/min", "/Min")
+      ),
     pattern = map(outcome_groups),
     iteration = "list"
   ),
@@ -718,8 +731,10 @@ list(
                 locations = cells_row_groups()) %>%
       tab_style(style = cell_text(align = "right"),
                 locations = cells_body(columns = intervention)) %>%
-      tab_style(style = cell_text(align = "left"),
-                locations = cells_body(columns = n)) %>%
+      tab_style(style = cell_text(align = "center"),
+                locations = cells_body(columns = c(n, rel, rank))) %>%
+      tab_style(style = cell_text(align = "center"),
+               locations = cells_column_labels(columns = c(n, rel, rank))) %>%
       tab_style(style = cell_text(align = "right"),
                 locations = cells_column_labels(columns = intervention)) %>%
       tab_footnote(
@@ -874,7 +889,10 @@ list(
                everything()) %>%
         rename_with( ~ str_remove(.x, "_rel")) %>%
         select(-sd) %>%
-        mutate(analysis = "NMA")
+        mutate(analysis = "NMA") %>%
+        mutate(
+          intervention = tolower(intervention)
+        )
     ),
     pattern = map(nma_rel)
   ),
